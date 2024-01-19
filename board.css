@@ -65,3 +65,6 @@
   background-repeat: no-repeat;
   background-position: center;
 }
+.highlight {
+  background-color: yellow !important;
+}
