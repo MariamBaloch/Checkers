@@ -160,6 +160,37 @@ for (let i = 0; i < blocks.length; i++) {
   })
 }
 
+const movable_blocks = (x, y, classname) => {
+  move1 = []
+  move2 = []
+  move3 = []
+  move4 = []
+
+  switch (classname) {
+    case 'piece':
+      move1 = [x + 1, y + 1]
+      move2 = [x + 1, y - 1]
+      break
+    case 'op-piece':
+      move1 = [x - 1, y + 1]
+      move2 = [x - 1, y - 1]
+      break
+    case 'cr-piece':
+      move1 = [x + 1, y + 1]
+      move2 = [x + 1, y - 1]
+      move3 = [x - 1, y - 1]
+      move4 = [x - 1, y + 1]
+      break
+    case 'cr-op-piece':
+      move1 = [x - 1, y + 1]
+      move2 = [x - 1, y - 1]
+      move3 = [x + 1, y - 1]
+      move4 = [x + 1, y - 1]
+      break
+  }
+  return [move1, move2, move3, move4]
+}
+
 // for (let i = 0; i < blocks.length; i++) {
 //   blocks[i].addEventListener('click', () => {
 //     if (blocks[i].value > 0) {
