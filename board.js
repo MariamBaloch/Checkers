@@ -16,6 +16,7 @@ let blocks = document.querySelectorAll('.board-block')
 //   j++
 // }
 
+//adding co-ordinates
 let x = 0
 let y = 0
 for (let i = 0; i < blocks.length; i++) {
@@ -26,19 +27,28 @@ for (let i = 0; i < blocks.length; i++) {
   blocks[i].value = [x, y]
   y++
 }
+//adding spaces that can be moved to
 for (let i = 0; i < blocks.length; i += 2) {
   if (i === 8 || i === 24 || i === 40 || i === 56) {
-    i++
+    i--
+    blocks[i].value.push(0)
+    i += 2
   } else if (i === 17 || i === 33 || i === 49) {
     i--
   }
   blocks[i].value.push(1)
+  if (i > 0) {
+    if (i !== 16 && i !== 32 && i !== 48) {
+      i--
+      blocks[i].value.push(0)
+      i++
+    }
+  }
 }
-
-// for (let i = 0; i < blocks.length; i++) {
-//   console.log(blocks[i].value)
-//   blocks[i].innerText = blocks[i].value
-// }
+//showing co-ordinates for helping meee
+for (let i = 0; i < blocks.length; i++) {
+  blocks[i].innerText = `(${blocks[i].value[0]} , ${blocks[i].value[1]})`
+}
 
 // const movement = [
 //   [1, 2, 3, 4],
@@ -51,16 +61,60 @@ for (let i = 0; i < blocks.length; i += 2) {
 //   [29, 30, 31, 32]
 // ]
 let turn = 1
+// 1-piece 2 = op-piece 3 = cr-piece 4-cr-op-piece 0=nothing h=highlight
 let board_place = [
   [1, 0, 1, 0, 1, 0, 1, 0],
   [0, 1, 0, 1, 0, 1, 0, 1],
   [1, 0, 1, 0, 1, 0, 1, 0],
-  [, , , , , , ,],
-  [, , , , , , ,],
-  [0, 1, 0, 1, 0, 1, 0, 1],
-  [1, 0, 1, 0, 1, 0, 1, 0],
-  [0, 1, 0, 1, 0, 1, 0, 1]
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 2, 0, 2, 0, 2, 0, 2],
+  [2, 0, 2, 0, 2, 0, 2, 0],
+  [0, 2, 0, 2, 0, 2, 0, 2]
 ]
+//debugger
+const update_board = () => {
+  let k = 0
+
+  for (let i = 0; i < board_place.length; i++) {
+    for (let j = 0; j < 8; j++) {
+      x = blocks[k].value[0]
+      y = blocks[k].value[1]
+      if (x === i && y === j)
+        switch (board_place[i][j]) {
+          case 1:
+            if (!blocks[k].classList.contains('piece')) {
+              blocks[k].classList.toggle('piece')
+            }
+            break
+          case 2:
+            if (!blocks[k].classList.contains('op-piece')) {
+              blocks[k].classList.toggle('op-piece')
+            }
+            break
+          case 3:
+            if (!blocks[k].classList.contains('cr-piece')) {
+              blocks[k].classList.toggle('cr-piece')
+            }
+            break
+          case 4:
+            if (!blocks[k].classList.contains('cr-op-piece')) {
+              blocks[k].classList.toggle('cr-op-piece')
+            }
+            break
+          case 0:
+            blocks[k].className = 'board-block'
+            break
+          case 'h':
+            if (!blocks[k].classList.contains('highlight')) {
+              blocks[k].classList.toggle('highlight')
+            }
+        }
+      k++
+    }
+  }
+}
+update_board()
 //fix
 // const update_board = () => {
 //   let k = 0
@@ -93,9 +147,16 @@ let board_place = [
 
 for (let i = 0; i < blocks.length; i++) {
   blocks[i].addEventListener('click', () => {
+    console.log(blocks[i].value)
     x = blocks[i].value[0]
     y = blocks[i].value[1]
-    console.log(board_place[x][y])
+    let classname = blocks[i].classList[1]
+    if (blocks[i].value[2] === 1) {
+      moves = movable_blocks(x, y, classname)
+      console.log(moves)
+      if (turn === 1) {
+      }
+    }
   })
 }
 
