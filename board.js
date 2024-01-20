@@ -86,25 +86,21 @@ const update_board = () => {
           case 1:
             if (!blocks[k].classList.contains('piece')) {
               blocks[k].classList.toggle('piece')
-              blocks[k].value[3] === 1
             }
             break
           case 2:
             if (!blocks[k].classList.contains('op-piece')) {
               blocks[k].classList.toggle('op-piece')
-              blocks[k].value[3] === 1
             }
             break
           case 3:
             if (!blocks[k].classList.contains('cr-piece')) {
               blocks[k].classList.toggle('cr-piece')
-              blocks[k].value[3] === 1
             }
             break
           case 4:
             if (!blocks[k].classList.contains('cr-op-piece')) {
               blocks[k].classList.toggle('cr-op-piece')
-              blocks[k].value[3] === 1
             }
             break
           case 0:
@@ -120,19 +116,7 @@ const update_board = () => {
   }
 }
 update_board()
-//if piece exists blocks[i].value[3] == 1 else 0
-for (let i = 0; i < blocks.length; i++) {
-  if (
-    blocks[i].classList.contains('piece') ||
-    blocks[i].classList.contains('cr-piece') ||
-    blocks[i].classList.contains('op-piece') ||
-    blocks[i].classList.contains('cr-op-piece')
-  ) {
-    blocks[i].value.push(1)
-  } else {
-    blocks[i].value.push(0)
-  }
-}
+
 //fix
 // const update_board = () => {
 //   let k = 0
@@ -202,14 +186,16 @@ for (let i = 0; i < blocks.length; i++) {
 
 const make_move = (x, y, moves) => {
   let complete = 0
-  if (x === moves[0][0] && y === moves[0][1]) {
-    board_place[x][y] = 0
-    board_place[moves[0][0]][moves[0][1]] = 1
-    complete = 1
-  } else if (x === moves[1][0] && y === moves[1][1]) {
-    board_place[x][y] = 0
-    board_place[moves[1][0]][moves[1][1]] = 1
-    complete = 1
+  if (board_place[x][y] === 'h') {
+    if (x === moves[0][0] && y === moves[0][1]) {
+      // board_place[x][y] = 0
+      board_place[moves[0][0]][moves[0][1]] = 1
+      complete = 1
+    } else if (x === moves[1][0] && y === moves[1][1]) {
+      // board_place[x][y] = 0
+      board_place[moves[1][0]][moves[1][1]] = 1
+      complete = 1
+    }
   }
 
   reset_highlight()
@@ -233,15 +219,19 @@ const reset_highlight = () => {
 }
 
 const hightlight_movable_blocks = (x, y, moves) => {
+  let complete = 0
   if (board_place[moves[0][0]][moves[0][1]] === 0) {
     board_place[moves[0][0]][moves[0][1]] = 'h'
     board_place[x][y] = 0
+    complete = 1
   }
   if (board_place[moves[1][0]][moves[1][1]] === 0) {
     board_place[moves[1][0]][moves[1][1]] = 'h'
     board_place[x][y] = 0
+    complete = 1
   }
   update_board()
+  return complete
 }
 
 const movable_blocks = (x, y, classname) => {
@@ -275,7 +265,7 @@ const movable_blocks = (x, y, classname) => {
   return [move1, move2, move3, move4]
 }
 
-let click = 1
+let click = 0
 let prevValues = []
 for (let i = 0; i < blocks.length; i++) {
   blocks[i].addEventListener('click', () => {
@@ -290,22 +280,29 @@ for (let i = 0; i < blocks.length; i++) {
     let prevY = prevValues[1]
     let prevClass = prevValues[2]
     let complete
+
     if (blocks[i].value[2] === 1 && turn === 1) {
-      console.log(click)
+      click++
+      console.log('click' + click)
       if (click === 1) {
         moves = movable_blocks(x, y, classname)
-        hightlight_movable_blocks(x, y, moves)
-        click++
-      } else if (click === 2) {
+        complete = hightlight_movable_blocks(x, y, moves)
+
+        if (complete === 0) {
+          console.log('complete' + complete)
+          click = 0
+        }
+      }
+      if (click === 2) {
         moves = movable_blocks(prevX, prevY, prevClass)
         complete = make_move(x, y, moves)
-        console.log('complete' + complete)
+
         if (complete === 1) {
-          click = 3
+          turn = 2
+          click = 0
+        } else {
+          click = 0
         }
-      } else if (click === 3) {
-        turn = 2
-        click = 0
       }
     } else if (turn === 2) {
       prevValues = []
@@ -314,7 +311,7 @@ for (let i = 0; i < blocks.length; i++) {
       console.log(turn)
       console.log(click)
     }
-    update_board()
+    //update_board()
   })
 }
 // for (let i = 0; i < blocks.length; i++) {
@@ -365,3 +362,20 @@ for (let i = 0; i < blocks.length; i++) {
 //     update_board()
 //   })
 // }
+
+//if piece exists blocks[i].value[3] == 1 else 0
+// for (let i = 0; i < blocks.length; i++) {
+//   if (
+//     blocks[i].classList.contains('piece') ||
+//     blocks[i].classList.contains('cr-piece') ||
+//     blocks[i].classList.contains('op-piece') ||
+//     blocks[i].classList.contains('cr-op-piece')
+//   ) {
+//     blocks[i].value[3] = 1
+//   } else {
+//     blocks[i].value[3] = 0
+//   }
+// }
+// blocks.forEach((block) => {
+//   console.log(block.value)
+// })
