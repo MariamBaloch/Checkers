@@ -1,6 +1,6 @@
 //Assigned values to each board block
 let blocks = document.querySelectorAll('.board-block')
-
+let turn = 1
 // for (let i = 0; i < blocks.length; i++) {
 //   blocks[i].value = j
 //   j++
@@ -45,6 +45,7 @@ for (let i = 0; i < blocks.length; i += 2) {
     }
   }
 }
+
 //showing co-ordinates for helping meee
 for (let i = 0; i < blocks.length; i++) {
   blocks[i].innerText = `(${blocks[i].value[0]} , ${blocks[i].value[1]})`
@@ -60,7 +61,7 @@ for (let i = 0; i < blocks.length; i++) {
 //   [25, 26, 27, 28],
 //   [29, 30, 31, 32]
 // ]
-let turn = 1
+
 // 1-piece 2 = op-piece 3 = cr-piece 4-cr-op-piece 0=nothing h=highlight
 let board_place = [
   [1, 0, 1, 0, 1, 0, 1, 0],
@@ -85,21 +86,25 @@ const update_board = () => {
           case 1:
             if (!blocks[k].classList.contains('piece')) {
               blocks[k].classList.toggle('piece')
+              blocks[k].value[3] === 1
             }
             break
           case 2:
             if (!blocks[k].classList.contains('op-piece')) {
               blocks[k].classList.toggle('op-piece')
+              blocks[k].value[3] === 1
             }
             break
           case 3:
             if (!blocks[k].classList.contains('cr-piece')) {
               blocks[k].classList.toggle('cr-piece')
+              blocks[k].value[3] === 1
             }
             break
           case 4:
             if (!blocks[k].classList.contains('cr-op-piece')) {
               blocks[k].classList.toggle('cr-op-piece')
+              blocks[k].value[3] === 1
             }
             break
           case 0:
@@ -115,6 +120,19 @@ const update_board = () => {
   }
 }
 update_board()
+//if piece exists blocks[i].value[3] == 1 else 0
+for (let i = 0; i < blocks.length; i++) {
+  if (
+    blocks[i].classList.contains('piece') ||
+    blocks[i].classList.contains('cr-piece') ||
+    blocks[i].classList.contains('op-piece') ||
+    blocks[i].classList.contains('cr-op-piece')
+  ) {
+    blocks[i].value.push(1)
+  } else {
+    blocks[i].value.push(0)
+  }
+}
 //fix
 // const update_board = () => {
 //   let k = 0
@@ -145,19 +163,85 @@ update_board()
 // }
 //update_board()
 
-for (let i = 0; i < blocks.length; i++) {
-  blocks[i].addEventListener('click', () => {
-    console.log(blocks[i].value)
-    x = blocks[i].value[0]
-    y = blocks[i].value[1]
-    let classname = blocks[i].classList[1]
-    if (blocks[i].value[2] === 1) {
-      moves = movable_blocks(x, y, classname)
-      console.log(moves)
-      if (turn === 1) {
+// let status = 0
+// const make_move = (x, y, moves) => {
+//   let temp = board_place[x][y]
+//   board_place[x][y] = 0
+
+//   if (board_place[moves[0][0]][moves[0][1]] === 0) {
+//     board_place[moves[0][0]][moves[0][1]] = 'h'
+//   }
+//   if (board_place[moves[1][0]][moves[1][1]] === 0) {
+//     board_place[moves[1][0]][moves[1][1]] = 'h'
+//   }
+
+//   for (let i = 0; i < blocks.length; i++) {
+//     blocks[i].addEventListener('click', () => {
+//       if (status === 0) {
+//         if (
+//           blocks[i].value[0] === moves[0][0] &&
+//           blocks[i].value[1] === moves[0][1]
+//         ) {
+//           board_place[moves[0][0]][moves[0][1]] = temp
+//         } else if (
+//           blocks[i].value[0] === moves[1][0] &&
+//           blocks[i].value[1] === moves[1][1]
+//         ) {
+//           board_place[moves[1][0]][moves[1][1]] = temp
+//         } else {
+//           board_place[x][y] = temp
+//         }
+//         update_board()
+//         status = 1
+//       }
+//       reset_highlight(status)
+//     })
+//   }
+//   return status
+// }
+
+const make_move = (x, y, moves) => {
+  let complete = 0
+  if (x === moves[0][0] && y === moves[0][1]) {
+    board_place[x][y] = 0
+    board_place[moves[0][0]][moves[0][1]] = 1
+    complete = 1
+  } else if (x === moves[1][0] && y === moves[1][1]) {
+    board_place[x][y] = 0
+    board_place[moves[1][0]][moves[1][1]] = 1
+    complete = 1
+  }
+
+  reset_highlight()
+  update_board()
+  return complete
+}
+const reset_highlight = () => {
+  for (let i = 0; i < board_place.length; i++) {
+    for (let j = 0; j < 8; j++) {
+      if (board_place[i][j] === 'h') {
+        board_place[i][j] === 0
       }
     }
-  })
+  }
+
+  // for (let i = 0; i < blocks.length; i++) {
+  //   if (blocks[i].classList.contains('highlight')) {
+  //     blocks[i].classList.toggle('highlight')
+  //   }
+  // }
+}
+
+const hightlight_movable_blocks = (x, y, moves) => {
+  if (board_place[moves[0][0]][moves[0][1]] === 0) {
+    board_place[moves[0][0]][moves[0][1]] = 'h'
+    board_place[x][y] = 0
+  }
+  if (board_place[moves[1][0]][moves[1][1]] === 0) {
+    board_place[moves[1][0]][moves[1][1]] = 'h'
+    board_place[x][y] = 0
+  }
+  update_board()
 }
 
 const movable_blocks = (x, y, classname) => {
@@ -191,6 +275,48 @@ const movable_blocks = (x, y, classname) => {
   return [move1, move2, move3, move4]
 }
 
+let click = 1
+let prevValues = []
+for (let i = 0; i < blocks.length; i++) {
+  blocks[i].addEventListener('click', () => {
+    console.log('i am here ' + blocks[i].value)
+    let classname = blocks[i].classList[1]
+    x = blocks[i].value[0]
+    y = blocks[i].value[1]
+    prevValues.push(x)
+    prevValues.push(y)
+    prevValues.push(classname)
+    let prevX = prevValues[0]
+    let prevY = prevValues[1]
+    let prevClass = prevValues[2]
+    let complete
+    if (blocks[i].value[2] === 1 && turn === 1) {
+      console.log(click)
+      if (click === 1) {
+        moves = movable_blocks(x, y, classname)
+        hightlight_movable_blocks(x, y, moves)
+        click++
+      } else if (click === 2) {
+        moves = movable_blocks(prevX, prevY, prevClass)
+        complete = make_move(x, y, moves)
+        console.log('complete' + complete)
+        if (complete === 1) {
+          click = 3
+        }
+      } else if (click === 3) {
+        turn = 2
+        click = 0
+      }
+    } else if (turn === 2) {
+      prevValues = []
+      console.log("its 2's turn")
+      console.log(prevValues)
+      console.log(turn)
+      console.log(click)
+    }
+    update_board()
+  })
+}
 // for (let i = 0; i < blocks.length; i++) {
 //   blocks[i].addEventListener('click', () => {
 //     if (blocks[i].value > 0) {
