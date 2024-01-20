@@ -51,17 +51,6 @@ for (let i = 0; i < blocks.length; i++) {
   blocks[i].innerText = `(${blocks[i].value[0]} , ${blocks[i].value[1]})`
 }
 
-// const movement = [
-//   [1, 2, 3, 4],
-//   [5, 6, 7, 8],
-//   [9, 10, 11, 12],
-//   [13, 14, 15, 16],
-//   [17, 18, 19, 20],
-//   [21, 22, 23, 24],
-//   [25, 26, 27, 28],
-//   [29, 30, 31, 32]
-// ]
-
 // 1-piece 2 = op-piece 3 = cr-piece 4-cr-op-piece 0=nothing h=highlight
 let board_place = [
   [1, 0, 1, 0, 1, 0, 1, 0],
@@ -87,20 +76,32 @@ const update_board = () => {
             if (!blocks[k].classList.contains('piece')) {
               blocks[k].classList.toggle('piece')
             }
+            if (blocks[k].classList.contains('highlight')) {
+              blocks[k].classList.toggle('highlight')
+            }
             break
           case 2:
             if (!blocks[k].classList.contains('op-piece')) {
               blocks[k].classList.toggle('op-piece')
+            }
+            if (blocks[k].classList.contains('highlight')) {
+              blocks[k].classList.toggle('highlight')
             }
             break
           case 3:
             if (!blocks[k].classList.contains('cr-piece')) {
               blocks[k].classList.toggle('cr-piece')
             }
+            if (blocks[k].classList.contains('highlight')) {
+              blocks[k].classList.toggle('highlight')
+            }
             break
           case 4:
             if (!blocks[k].classList.contains('cr-op-piece')) {
               blocks[k].classList.toggle('cr-op-piece')
+            }
+            if (blocks[k].classList.contains('highlight')) {
+              blocks[k].classList.toggle('highlight')
             }
             break
           case 0:
@@ -183,6 +184,17 @@ update_board()
 //   }
 //   return status
 // }
+const reset_highlight = () => {
+  for (let i = 0; i < board_place.length; i++) {
+    for (let j = 0; j < 8; j++) {
+      console.log(board_place[i][j])
+      if (board_place[i][j] === 'h') {
+        board_place[i][j] = 0
+        update_board()
+      }
+    }
+  }
+}
 
 const make_move = (x, y, moves) => {
   let complete = 0
@@ -197,25 +209,9 @@ const make_move = (x, y, moves) => {
       complete = 1
     }
   }
-
   reset_highlight()
   update_board()
   return complete
-}
-const reset_highlight = () => {
-  for (let i = 0; i < board_place.length; i++) {
-    for (let j = 0; j < 8; j++) {
-      if (board_place[i][j] === 'h') {
-        board_place[i][j] === 0
-      }
-    }
-  }
-
-  // for (let i = 0; i < blocks.length; i++) {
-  //   if (blocks[i].classList.contains('highlight')) {
-  //     blocks[i].classList.toggle('highlight')
-  //   }
-  // }
 }
 
 const hightlight_movable_blocks = (x, y, moves) => {
@@ -281,7 +277,10 @@ for (let i = 0; i < blocks.length; i++) {
     let prevClass = prevValues[2]
     let complete
 
-    if (blocks[i].value[2] === 1 && turn === 1) {
+    if (
+      (blocks[i].value[2] === 1 && turn === 1 && classname === 'piece') ||
+      classname === 'cr-piece'
+    ) {
       click++
       console.log('click' + click)
       if (click === 1) {
