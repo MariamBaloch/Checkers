@@ -38,11 +38,21 @@ for (let i = 0; i < blocks.length; i++) {
 }
 
 // 1-piece 2 = op-piece 3 = cr-piece 4-cr-op-piece 0=nothing h=highlight
+// let board_place = [
+//   [1, 0, 1, 0, 1, 0, 1, 0],
+//   [0, 1, 0, 1, 0, 1, 0, 1],
+//   [1, 0, 1, 0, 1, 0, 1, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 2, 0, 2, 0, 2, 0, 2],
+//   [2, 0, 2, 0, 2, 0, 2, 0],
+//   [0, 2, 0, 2, 0, 2, 0, 2]
+// ]
 let board_place = [
   [1, 0, 1, 0, 1, 0, 1, 0],
   [0, 1, 0, 1, 0, 1, 0, 1],
   [1, 0, 1, 0, 1, 0, 1, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 2, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0],
   [0, 2, 0, 2, 0, 2, 0, 2],
   [2, 0, 2, 0, 2, 0, 2, 0],
@@ -129,39 +139,58 @@ const reset_highlight = () => {
   }
 }
 // need to fix this
-const make_move = (x, y, moves) => {
+// const make_move = (x, y, moves) => {
+//   let complete = 0
+//   if (board_place[x][y] === 'h') {
+//     if (x === moves[0][0] && y === moves[0][1]) {
+//       // board_place[x][y] = 0
+//       board_place[moves[0][0]][moves[0][1]] = 1
+//       complete = 1
+//     } else if (x === moves[1][0] && y === moves[1][1]) {
+//       // board_place[x][y] = 0
+//       board_place[moves[1][0]][moves[1][1]] = 1
+//       complete = 1
+//     }
+//   }
+//   reset_highlight()
+//   update_board()
+//   return complete
+// }
+
+const make_move = (x, y, new_moves, prevX, prevY, prevClassName) => {
   let complete = 0
-  if (board_place[x][y] === 'h') {
-    if (x === moves[0][0] && y === moves[0][1]) {
-      // board_place[x][y] = 0
-      board_place[moves[0][0]][moves[0][1]] = 1
-      complete = 1
-    } else if (x === moves[1][0] && y === moves[1][1]) {
-      // board_place[x][y] = 0
-      board_place[moves[1][0]][moves[1][1]] = 1
-      complete = 1
+  let moves = new_moves.moves
+  let removable_pieces = new_moves.removables
+  let remove = []
+
+  for (let i = 0; i < moves.length; i++) {
+    if (x === moves[i][0] && y === moves[i][1]) {
+      board_place[prevX][prevY] = 0
+      switch (prevClassName) {
+        case 'piece':
+          board_place[x][y] = 1
+          break
+        case 'op-piece':
+          board_place[x][y] = 2
+          break
+        case 'cr-piece':
+          board_place[x][y] = 3
+          break
+        case 'cr-op-piece':
+          board_place[x][y] = 4
+          break
+      }
+      if (removable_pieces[i][0] !== false && removable_pieces[i][0] != false) {
+        board_place[[removable_pieces[i][0]]][[removable_pieces[i][1]]] = 0
+      }
     }
   }
+
   reset_highlight()
   update_board()
   return complete
 }
-//highlighting the movable blocks
-// const hightlight_movable_blocks = (x, y, moves) => {
-//   let complete = 0
-//   if (board_place[moves[0][0]][moves[0][1]] === 0) {
-//     board_place[moves[0][0]][moves[0][1]] = 'h'
-//     board_place[x][y] = 0
-//     complete = 1
-//   }
-//   if (board_place[moves[1][0]][moves[1][1]] === 0) {
-//     board_place[moves[1][0]][moves[1][1]] = 'h'
-//     board_place[x][y] = 0
-//     complete = 1
-//   }
-//   update_board()
-//   return complete
-// }
+//highlighting movable blocks
 const hightlight_movable_blocks = (new_moves) => {
   let complete = 0
   let moves = new_moves.moves
@@ -485,51 +514,67 @@ const removable_blocks = (moves, classname) => {
   return moves_removables
 }
 //event listener
-let click = 1
+let click = 0
 let prevValues = []
 for (let i = 0; i < blocks.length; i++) {
   blocks[i].addEventListener('click', () => {
     console.log('i am here ' + blocks[i].value)
     let classname = blocks[i].classList[1]
-    x = blocks[i].value[0]
-    y = blocks[i].value[1]
+    let x = blocks[i].value[0]
+    let y = blocks[i].value[1]
     prevValues.push(x)
     prevValues.push(y)
     prevValues.push(classname)
-    let prevX = prevValues[0]
-    let prevY = prevValues[1]
-    let prevClass = prevValues[2]
+    let prevX = prevValues[prevValues.length - 6]
+    let prevY = prevValues[prevValues.length - 5]
+    let prevClass = prevValues[prevValues.length - 4]
+
     let complete
     let new_moves
-
+    console.log('click: ' + click)
     if (
       blocks[i].value[2] === 1 &&
       turn === 1 &&
-      !classname !== 'op-piece' &&
-      !classname !== 'cr-op-piece'
+      classname !== 'op-piece' &&
+      classname !== 'cr-op-piece' &&
+      board_place[x][y] !== 0
     ) {
-      console.log('click' + click)
+      click++
+      console.log('click: ' + click)
+      console.log('turn 1')
       if (click === 1) {
         moves = movable_blocks(x, y, classname)
         new_moves = removable_blocks(moves, classname)
         complete = hightlight_movable_blocks(new_moves)
         if (complete === 1) {
           console.log('complete ' + complete)
-          click = 2
         }
       }
+      // debugger
       if (click === 2) {
-        //moves = movable_blocks(prevX, prevY, prevClass)
-        console.log('complete ' + complete)
-        //complete = make_move(x, y, moves)
-        complete === 1
-        if (complete === 1) {
-          turn = 2
+        if (board_place[x][y] === 'h' && board_place[x][y] !== 0) {
+          click = 3
         } else {
+          reset_highlight()
+          moves = movable_blocks(x, y, classname)
+          new_moves = removable_blocks(moves, classname)
+          complete = hightlight_movable_blocks(new_moves)
+          if (complete === 1) {
+            console.log('complete 2 ' + complete)
+          }
           click = 1
         }
       }
-    } else if (turn === 2) {
+      if (click === 3) {
+        //add moving pieces function which if completed returns 1
+        moves = movable_blocks(prevX, prevY, prevClass)
+        new_moves = removable_blocks(moves, prevClass)
+        make_move(x, y, new_moves, prevX, prevY, prevClass)
+        turn = 2
+        click = 1
+      }
+    }
+    if (turn === 2) {
       prevValues = []
       console.log("its 2's turn")
       console.log(prevValues)
