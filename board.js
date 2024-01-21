@@ -3,12 +3,12 @@ let blocks = document.querySelectorAll('.board-block')
 let turn = 1
 
 //adding co-ordinates
-let x = 0
-let y = 0
+let x = 1
+let y = 1
 for (let i = 0; i < blocks.length; i++) {
-  if (y >= 8) {
+  if (y >= 9) {
     x++
-    y = 0
+    y = 1
   }
   blocks[i].value = [x, y]
   y++
@@ -48,22 +48,38 @@ for (let i = 0; i < blocks.length; i++) {
 //   [2, 0, 2, 0, 2, 0, 2, 0],
 //   [0, 2, 0, 2, 0, 2, 0, 2]
 // ]
+
 let board_place = [
-  [1, 0, 1, 0, 1, 0, 1, 0],
-  [0, 1, 0, 1, 0, 1, 0, 1],
-  [1, 0, 1, 0, 1, 0, 1, 0],
-  [0, 0, 0, 2, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 2, 0, 2, 0, 2, 0, 2],
-  [2, 0, 2, 0, 2, 0, 2, 0],
-  [0, 2, 0, 2, 0, 2, 0, 2]
+  [0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+  [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+  [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 2, 0, 2, 0, 2, 0, 2, 0],
+  [0, 2, 0, 2, 0, 2, 0, 2, 0, 0],
+  [0, 0, 2, 0, 2, 0, 2, 0, 2, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]
 
+const crown_piece = () => {
+  for (let i = 0; i < board_place[8].length; i++) {
+    if (board_place[8][i] === 1) {
+      board_place[8][i] = 3
+    }
+  }
+  for (let i = 0; i < board_place[1].length; i++) {
+    if (board_place[1][i] === 2) {
+      board_place[1][i] = 4
+    }
+  }
+}
+//crown pieces that reach the end line
 //update board visually
 const update_board = () => {
   let k = 0
-  for (let i = 0; i < board_place.length; i++) {
-    for (let j = 0; j < 8; j++) {
+  for (let i = 1; i < board_place.length - 1; i++) {
+    for (let j = 1; j < 9; j++) {
       x = blocks[k].value[0]
       y = blocks[k].value[1]
       if (x === i && y === j)
@@ -109,23 +125,11 @@ const update_board = () => {
             }
         }
       k++
+      crown_piece()
     }
   }
 }
-//crown pieces that reach the end line
-const crown_piece = () => {
-  for (let i = 0; i < board_place[7].length; i++) {
-    if (board_place[7][i] === 1) {
-      board_place[7][i] = 3
-    }
-  }
-  for (let i = 0; i < board_place[0].length; i++) {
-    if (board_place[0][i] === 2) {
-      board_place[0][i] = 4
-    }
-  }
-}
-crown_piece()
+
 update_board()
 // reset the highlighting once move has been made
 const reset_highlight = () => {
@@ -250,6 +254,10 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[0][0] = moves[0][0] + 1
           new_moves[0][1] = moves[0][1] + 1
+          if (board_place[new_moves[0][0]][new_moves[0][1]] > 0) {
+            new_moves[0][0] = false
+            new_moves[0][1] = false
+          }
           removable_piece[0][0] = moves[0][0]
           removable_piece[0][1] = moves[0][1]
         } else if (
@@ -270,6 +278,10 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[1][0] = moves[1][0] + 1
           new_moves[1][1] = moves[1][1] - 1
+          if (board_place[new_moves[1][0]][new_moves[1][1]] > 0) {
+            new_moves[1][0] = false
+            new_moves[1][1] = false
+          }
           removable_piece[1][0] = moves[1][0]
           removable_piece[1][1] = moves[1][1]
         } else if (
@@ -300,6 +312,10 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[0][0] = moves[0][0] - 1
           new_moves[0][1] = moves[0][1] + 1
+          if (board_place[new_moves[0][0]][new_moves[0][1]] > 0) {
+            new_moves[0][0] = false
+            new_moves[0][1] = false
+          }
           removable_piece[0][0] = moves[0][0]
           removable_piece[0][1] = moves[0][1]
         } else if (
@@ -320,6 +336,10 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[1][0] = moves[1][0] - 1
           new_moves[1][1] = moves[1][1] - 1
+          if (board_place[new_moves[1][0]][new_moves[1][1]] > 0) {
+            new_moves[1][0] = false
+            new_moves[1][1] = false
+          }
           removable_piece[1][0] = moves[1][0]
           removable_piece[1][1] = moves[1][1]
         } else if (
@@ -350,6 +370,10 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[0][0] = moves[0][0] + 1
           new_moves[0][1] = moves[0][1] + 1
+          if (board_place[new_moves[0][0]][new_moves[0][1]] > 0) {
+            new_moves[0][0] = false
+            new_moves[0][1] = false
+          }
           removable_piece[0][0] = moves[0][0]
           removable_piece[0][1] = moves[0][1]
         } else if (
@@ -370,6 +394,10 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[1][0] = moves[1][0] + 1
           new_moves[1][1] = moves[1][1] - 1
+          if (board_place[new_moves[1][0]][new_moves[1][1]] > 0) {
+            new_moves[1][0] = false
+            new_moves[1][1] = false
+          }
           removable_piece[1][0] = moves[1][0]
           removable_piece[1][1] = moves[1][1]
         } else if (
@@ -390,6 +418,10 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[2][0] = moves[2][0] - 1
           new_moves[2][1] = moves[2][1] - 1
+          if (board_place[new_moves[2][0]][new_moves[2][1]] > 0) {
+            new_moves[2][0] = false
+            new_moves[2][1] = false
+          }
           removable_piece[2][0] = moves[2][0]
           removable_piece[2][1] = moves[2][1]
         } else if (
@@ -410,6 +442,10 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[3][0] = moves[3][0] - 1
           new_moves[3][1] = moves[3][1] + 1
+          if (board_place[new_moves[3][0]][new_moves[3][1]] > 0) {
+            new_moves[3][0] = false
+            new_moves[3][1] = false
+          }
           removable_piece[3][0] = moves[3][0]
           removable_piece[3][1] = moves[3][1]
         } else if (
@@ -432,6 +468,10 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[0][0] = moves[0][0] - 1
           new_moves[0][1] = moves[0][1] + 1
+          if (board_place[new_moves[0][0]][0][1]) {
+            new_moves[0][0] = false
+            new_moves[0][1] = false
+          }
           removable_piece[0][0] = moves[0][0]
           removable_piece[0][1] = moves[0][1]
         } else if (
@@ -452,6 +492,10 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[1][0] = moves[1][0] - 1
           new_moves[1][1] = moves[1][1] - 1
+          if (board_place[new_moves[1][0]][new_moves[1][1]] > 0) {
+            new_moves[1][0] = false
+            new_moves[1][1] = false
+          }
           removable_piece[1][0] = moves[1][0]
           removable_piece[1][1] = moves[1][1]
         } else if (
@@ -470,10 +514,14 @@ const removable_blocks = (moves, classname) => {
           board_place[moves[2][0]][moves[2][1]] === 1 ||
           board_place[moves[2][0]][moves[2][1]] === 3
         ) {
-          new_moves[2][0] = moves[0][0] + 1
-          new_moves[2][1] = moves[0][1] - 1
-          removable_piece[2][0] = moves[0][0]
-          removable_piece[2][1] = moves[0][1]
+          new_moves[2][0] = moves[2][0] + 1
+          new_moves[2][1] = moves[2][1] - 1
+          if (board_place[new_moves[2][0]][new_moves[2][1]] > 0) {
+            new_moves[2][0] = false
+            new_moves[2][1] = false
+          }
+          removable_piece[2][0] = moves[2][0]
+          removable_piece[2][1] = moves[2][1]
         } else if (
           board_place[moves[2][0]][moves[2][1]] === 2 ||
           board_place[moves[2][0]][moves[2][1]] === 4
@@ -481,8 +529,8 @@ const removable_blocks = (moves, classname) => {
           new_moves[2][0] = false
           new_moves[2][1] = false
         } else {
-          new_moves[2][0] = moves[0][0]
-          new_moves[2][1] = moves[0][1]
+          new_moves[2][0] = moves[2][0]
+          new_moves[2][1] = moves[2][1]
           removable_piece[2][0] = false
           removable_piece[2][1] = false
         }
@@ -490,8 +538,14 @@ const removable_blocks = (moves, classname) => {
           board_place[moves[3][0]][moves[3][1]] === 1 ||
           board_place[moves[3][0]][moves[3][1]] === 3
         ) {
-          new_moves[3][0] = moves[0][0] + 1
-          new_moves[3][1] = moves[0][1] + 1
+          new_moves[3][0] = moves[3][0] + 1
+          new_moves[3][1] = moves[3][1] + 1
+          if (board_place[new_moves[3][0]][new_moves[3][1]] > 0) {
+            new_moves[3][0] = false
+            new_moves[3][1] = false
+          }
+          removable_piece[3][0] = moves[3][0]
+          removable_piece[3][1] = moves[3][1]
         } else if (
           board_place[moves[3][0]][moves[3][1]] === 2 ||
           board_place[moves[3][0]][moves[3][1]] === 4
@@ -499,20 +553,22 @@ const removable_blocks = (moves, classname) => {
           new_moves[3][0] = false
           new_moves[3][1] = false
         } else {
-          new_moves[3][0] = moves[0][0]
-          new_moves[3][1] = moves[0][1]
+          new_moves[3][0] = moves[3][0]
+          new_moves[3][1] = moves[3][1]
           removable_piece[3][0] = false
           removable_piece[3][1] = false
         }
         break
     }
   }
+
   complete = 1
   moves_removables.moves = new_moves
   moves_removables.removables = removable_piece
   moves_removables.complete = complete
   return moves_removables
 }
+
 //event listener
 let click = 0
 let prevValues = []
@@ -569,18 +625,59 @@ for (let i = 0; i < blocks.length; i++) {
         //add moving pieces function which if completed returns 1
         moves = movable_blocks(prevX, prevY, prevClass)
         new_moves = removable_blocks(moves, prevClass)
+        console.log(new_moves)
         make_move(x, y, new_moves, prevX, prevY, prevClass)
         turn = 2
+        click = 0
+        console.log('koko')
+        //debugger
+      }
+    }
+    if (
+      blocks[i].value[2] === 1 &&
+      turn === 2 &&
+      classname !== 'piece' &&
+      classname !== 'cr-piece' &&
+      board_place[x][y] !== 0 &&
+      board_place[x][y] !== 1 &&
+      board_place[x][y] !== 3
+    ) {
+      console.log("its 2's turn")
+      click++
+      console.log('click: ' + click)
+
+      if (click === 1) {
+        moves = movable_blocks(x, y, classname)
+        new_moves = removable_blocks(moves, classname)
+        complete = hightlight_movable_blocks(new_moves)
+        if (complete === 1) {
+          console.log('complete ' + complete)
+        }
+      }
+      // debugger
+      if (click === 2) {
+        if (board_place[x][y] === 'h' && board_place[x][y] !== 0) {
+          click = 3
+        } else {
+          reset_highlight()
+          moves = movable_blocks(x, y, classname)
+          new_moves = removable_blocks(moves, classname)
+          complete = hightlight_movable_blocks(new_moves)
+          if (complete === 1) {
+            console.log('complete 2 ' + complete)
+          }
+          click = 1
+        }
+      }
+      if (click === 3) {
+        //add moving pieces function which if completed returns 1
+        moves = movable_blocks(prevX, prevY, prevClass)
+        new_moves = removable_blocks(moves, prevClass)
+        console.log(new_moves)
+        make_move(x, y, new_moves, prevX, prevY, prevClass)
+        turn = 1
         click = 1
       }
     }
-    if (turn === 2) {
-      prevValues = []
-      console.log("its 2's turn")
-      console.log(prevValues)
-      console.log(turn)
-      console.log(click)
-    }
-    //update_board()
   })
 }
