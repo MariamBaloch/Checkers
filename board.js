@@ -1,20 +1,6 @@
 //Assigned values to each board block
 let blocks = document.querySelectorAll('.board-block')
 let turn = 1
-// for (let i = 0; i < blocks.length; i++) {
-//   blocks[i].value = j
-//   j++
-// }
-
-// for (let i = 0; i < blocks.length; i +=2) {
-//   if (i === 8 || i === 24 || i === 40 || i === 56) {
-//     i++
-//   } else if (i === 17 || i === 33 || i === 49) {
-//     i--
-//   }
-//   blocks[i].value = [[i], [j]]
-//   j++
-// }
 
 //adding co-ordinates
 let x = 0
@@ -27,7 +13,7 @@ for (let i = 0; i < blocks.length; i++) {
   blocks[i].value = [x, y]
   y++
 }
-//adding spaces that can be moved to
+//adding spaces that pieces can be moved to
 for (let i = 0; i < blocks.length; i += 2) {
   if (i === 8 || i === 24 || i === 40 || i === 56) {
     i--
@@ -63,10 +49,9 @@ let board_place = [
   [0, 2, 0, 2, 0, 2, 0, 2]
 ]
 
-//debugger
+//update board visually
 const update_board = () => {
   let k = 0
-
   for (let i = 0; i < board_place.length; i++) {
     for (let j = 0; j < 8; j++) {
       x = blocks[k].value[0]
@@ -117,7 +102,7 @@ const update_board = () => {
     }
   }
 }
-
+//crown pieces that reach the end line
 const crown_piece = () => {
   for (let i = 0; i < board_place[7].length; i++) {
     if (board_place[7][i] === 1) {
@@ -132,11 +117,10 @@ const crown_piece = () => {
 }
 crown_piece()
 update_board()
-
+// reset the highlighting once move has been made
 const reset_highlight = () => {
   for (let i = 0; i < board_place.length; i++) {
     for (let j = 0; j < 8; j++) {
-      console.log(board_place[i][j])
       if (board_place[i][j] === 'h') {
         board_place[i][j] = 0
         update_board()
@@ -144,7 +128,7 @@ const reset_highlight = () => {
     }
   }
 }
-
+// need to fix this
 const make_move = (x, y, moves) => {
   let complete = 0
   if (board_place[x][y] === 'h') {
@@ -162,23 +146,36 @@ const make_move = (x, y, moves) => {
   update_board()
   return complete
 }
-
-const hightlight_movable_blocks = (x, y, moves) => {
+//highlighting the movable blocks
+// const hightlight_movable_blocks = (x, y, moves) => {
+//   let complete = 0
+//   if (board_place[moves[0][0]][moves[0][1]] === 0) {
+//     board_place[moves[0][0]][moves[0][1]] = 'h'
+//     board_place[x][y] = 0
+//     complete = 1
+//   }
+//   if (board_place[moves[1][0]][moves[1][1]] === 0) {
+//     board_place[moves[1][0]][moves[1][1]] = 'h'
+//     board_place[x][y] = 0
+//     complete = 1
+//   }
+//   update_board()
+//   return complete
+// }
+const hightlight_movable_blocks = (new_moves) => {
   let complete = 0
-  if (board_place[moves[0][0]][moves[0][1]] === 0) {
-    board_place[moves[0][0]][moves[0][1]] = 'h'
-    board_place[x][y] = 0
-    complete = 1
-  }
-  if (board_place[moves[1][0]][moves[1][1]] === 0) {
-    board_place[moves[1][0]][moves[1][1]] = 'h'
-    board_place[x][y] = 0
-    complete = 1
-  }
+  let moves = new_moves.moves
+  console.log(moves)
+  moves.forEach((move) => {
+    if (move[0] || move[1] !== false) {
+      board_place[move[0]][move[1]] = 'h'
+    }
+  })
+  complete = 1
   update_board()
   return complete
 }
-
+//calculate vanilla movable blocks
 const movable_blocks = (x, y, classname) => {
   move1 = []
   move2 = []
@@ -209,7 +206,7 @@ const movable_blocks = (x, y, classname) => {
   }
   return [move1, move2, move3, move4]
 }
-
+// calculate extended movable blocks and removable pieces
 const removable_blocks = (moves, classname) => {
   complete = 0
   new_moves = [[], [], [], []]
@@ -487,8 +484,8 @@ const removable_blocks = (moves, classname) => {
   moves_removables.complete = complete
   return moves_removables
 }
-
-let click = 0
+//event listener
+let click = 1
 let prevValues = []
 for (let i = 0; i < blocks.length; i++) {
   blocks[i].addEventListener('click', () => {
@@ -503,6 +500,7 @@ for (let i = 0; i < blocks.length; i++) {
     let prevY = prevValues[1]
     let prevClass = prevValues[2]
     let complete
+    let new_moves
 
     if (
       blocks[i].value[2] === 1 &&
@@ -510,28 +508,25 @@ for (let i = 0; i < blocks.length; i++) {
       !classname !== 'op-piece' &&
       !classname !== 'cr-op-piece'
     ) {
-      click++
       console.log('click' + click)
       if (click === 1) {
         moves = movable_blocks(x, y, classname)
-        console.log(moves)
-        console.log(removable_blocks(moves, classname))
-        complete = hightlight_movable_blocks(x, y, moves)
-
-        if (complete === 0) {
-          console.log('complete' + complete)
-          click = 0
+        new_moves = removable_blocks(moves, classname)
+        complete = hightlight_movable_blocks(new_moves)
+        if (complete === 1) {
+          console.log('complete ' + complete)
+          click = 2
         }
       }
       if (click === 2) {
-        moves = movable_blocks(prevX, prevY, prevClass)
-        complete = make_move(x, y, moves)
-
+        //moves = movable_blocks(prevX, prevY, prevClass)
+        console.log('complete ' + complete)
+        //complete = make_move(x, y, moves)
+        complete === 1
         if (complete === 1) {
           turn = 2
-          click = 0
         } else {
-          click = 0
+          click = 1
         }
       }
     } else if (turn === 2) {
