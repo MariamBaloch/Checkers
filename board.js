@@ -56,12 +56,13 @@ let board_place = [
   [1, 0, 1, 0, 1, 0, 1, 0],
   [0, 1, 0, 1, 0, 1, 0, 1],
   [1, 0, 1, 0, 1, 0, 1, 0],
-  [0, 0, 0, 0, 0, 2, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0],
   [0, 2, 0, 2, 0, 2, 0, 2],
   [2, 0, 2, 0, 2, 0, 2, 0],
   [0, 2, 0, 2, 0, 2, 0, 2]
 ]
+
 //debugger
 const update_board = () => {
   let k = 0
@@ -116,74 +117,22 @@ const update_board = () => {
     }
   }
 }
+
+const crown_piece = () => {
+  for (let i = 0; i < board_place[7].length; i++) {
+    if (board_place[7][i] === 1) {
+      board_place[7][i] = 3
+    }
+  }
+  for (let i = 0; i < board_place[0].length; i++) {
+    if (board_place[0][i] === 2) {
+      board_place[0][i] = 4
+    }
+  }
+}
+crown_piece()
 update_board()
 
-//fix
-// const update_board = () => {
-//   let k = 0
-//   for (let i = 0; i < board_place.length; i++) {
-//     for (let j = 0; j < 8; j++) {
-//       let temp = blocks[k].classList[1]
-//       if (temp !== undefined) {
-//         switch (temp) {
-//           case 'piece':
-//             board_place[i][j] = 1
-//             break
-//           case 'op-piece':
-//             board_place[i][j] = 2
-//             break
-//           case 'cr-piece':
-//             board_place[i][j] = 10
-//             break
-//           case 'cr-op-piece':
-//             board_place[i][j] = 20
-//             break
-//         }
-//       } else {
-//         board_place[i][j] = ''
-//       }
-//       k++
-//     }
-//   }
-// }
-//update_board()
-
-// let status = 0
-// const make_move = (x, y, moves) => {
-//   let temp = board_place[x][y]
-//   board_place[x][y] = 0
-
-//   if (board_place[moves[0][0]][moves[0][1]] === 0) {
-//     board_place[moves[0][0]][moves[0][1]] = 'h'
-//   }
-//   if (board_place[moves[1][0]][moves[1][1]] === 0) {
-//     board_place[moves[1][0]][moves[1][1]] = 'h'
-//   }
-
-//   for (let i = 0; i < blocks.length; i++) {
-//     blocks[i].addEventListener('click', () => {
-//       if (status === 0) {
-//         if (
-//           blocks[i].value[0] === moves[0][0] &&
-//           blocks[i].value[1] === moves[0][1]
-//         ) {
-//           board_place[moves[0][0]][moves[0][1]] = temp
-//         } else if (
-//           blocks[i].value[0] === moves[1][0] &&
-//           blocks[i].value[1] === moves[1][1]
-//         ) {
-//           board_place[moves[1][0]][moves[1][1]] = temp
-//         } else {
-//           board_place[x][y] = temp
-//         }
-//         update_board()
-//         status = 1
-//       }
-//       reset_highlight(status)
-//     })
-//   }
-//   return status
-// }
 const reset_highlight = () => {
   for (let i = 0; i < board_place.length; i++) {
     for (let j = 0; j < 8; j++) {
@@ -262,6 +211,7 @@ const movable_blocks = (x, y, classname) => {
 }
 
 const removable_blocks = (moves, classname) => {
+  complete = 0
   new_moves = [[], [], [], []]
   let removable_piece = [[], [], [], []]
   let moves_removables = {}
@@ -276,6 +226,12 @@ const removable_blocks = (moves, classname) => {
           new_moves[0][1] = moves[0][1] + 1
           removable_piece[0][0] = moves[0][0]
           removable_piece[0][1] = moves[0][1]
+        } else if (
+          board_place[moves[0][0]][moves[0][1]] === 1 ||
+          board_place[moves[0][0]][moves[0][1]] === 3
+        ) {
+          new_moves[0][0] = false
+          new_moves[0][1] = false
         } else {
           new_moves[0][0] = moves[0][0]
           new_moves[0][1] = moves[0][1]
@@ -290,12 +246,26 @@ const removable_blocks = (moves, classname) => {
           new_moves[1][1] = moves[1][1] - 1
           removable_piece[1][0] = moves[1][0]
           removable_piece[1][1] = moves[1][1]
+        } else if (
+          board_place[moves[1][0]][moves[1][1]] === 1 ||
+          board_place[moves[1][0]][moves[1][1]] === 3
+        ) {
+          new_moves[1][0] = false
+          new_moves[1][1] = false
         } else {
           new_moves[1][0] = moves[1][0]
           new_moves[1][1] = moves[1][1]
           removable_piece[1][0] = false
           removable_piece[1][1] = false
         }
+        new_moves[2][0] = false
+        new_moves[2][1] = false
+        new_moves[3][0] = false
+        new_moves[3][1] = false
+        removable_piece[2][0] = false
+        removable_piece[2][1] = false
+        removable_piece[3][0] = false
+        removable_piece[3][1] = false
         break
       case 'op-piece':
         if (
@@ -303,9 +273,15 @@ const removable_blocks = (moves, classname) => {
           board_place[moves[0][0]][moves[0][1]] === 3
         ) {
           new_moves[0][0] = moves[0][0] - 1
-          new_moves[0][1] = moves[0][1] - 1
+          new_moves[0][1] = moves[0][1] + 1
           removable_piece[0][0] = moves[0][0]
           removable_piece[0][1] = moves[0][1]
+        } else if (
+          board_place[moves[0][0]][moves[0][1]] === 2 ||
+          board_place[moves[0][0]][moves[0][1]] === 4
+        ) {
+          new_moves[0][0] = false
+          new_moves[0][1] = false
         } else {
           new_moves[0][0] = moves[0][0]
           new_moves[0][1] = moves[0][1]
@@ -316,16 +292,30 @@ const removable_blocks = (moves, classname) => {
           board_place[moves[1][0]][moves[1][1]] === 1 ||
           board_place[moves[1][0]][moves[1][1]] === 3
         ) {
-          new_moves[1][0] = moves[1][0] + 1
+          new_moves[1][0] = moves[1][0] - 1
           new_moves[1][1] = moves[1][1] - 1
           removable_piece[1][0] = moves[1][0]
           removable_piece[1][1] = moves[1][1]
+        } else if (
+          board_place[moves[1][0]][moves[1][1]] === 2 ||
+          board_place[moves[1][0]][moves[1][1]] === 4
+        ) {
+          new_moves[1][0] = false
+          new_moves[1][1] = false
         } else {
           new_moves[1][0] = moves[1][0]
           new_moves[1][1] = moves[1][1]
           removable_piece[1][0] = false
           removable_piece[1][1] = false
         }
+        new_moves[2][0] = false
+        new_moves[2][1] = false
+        new_moves[3][0] = false
+        new_moves[3][1] = false
+        removable_piece[2][0] = false
+        removable_piece[2][1] = false
+        removable_piece[3][0] = false
+        removable_piece[3][1] = false
         break
       case 'cr-piece':
         if (
@@ -336,6 +326,12 @@ const removable_blocks = (moves, classname) => {
           new_moves[0][1] = moves[0][1] + 1
           removable_piece[0][0] = moves[0][0]
           removable_piece[0][1] = moves[0][1]
+        } else if (
+          board_place[moves[0][0]][moves[0][1]] === 1 ||
+          board_place[moves[0][0]][moves[0][1]] === 3
+        ) {
+          new_moves[0][0] = false
+          new_moves[0][1] = false
         } else {
           new_moves[0][0] = moves[0][0]
           new_moves[0][1] = moves[0][1]
@@ -350,6 +346,12 @@ const removable_blocks = (moves, classname) => {
           new_moves[1][1] = moves[1][1] - 1
           removable_piece[1][0] = moves[1][0]
           removable_piece[1][1] = moves[1][1]
+        } else if (
+          board_place[moves[1][0]][moves[1][1]] === 1 ||
+          board_place[moves[1][0]][moves[1][1]] === 3
+        ) {
+          new_moves[1][0] = false
+          new_moves[1][1] = false
         } else {
           new_moves[1][0] = moves[1][0]
           new_moves[1][1] = moves[1][1]
@@ -360,10 +362,16 @@ const removable_blocks = (moves, classname) => {
           board_place[moves[2][0]][moves[2][1]] === 2 ||
           board_place[moves[2][0]][moves[2][1]] === 4
         ) {
-          new_moves[2][0] = moves[2][0] + 1
+          new_moves[2][0] = moves[2][0] - 1
           new_moves[2][1] = moves[2][1] - 1
           removable_piece[2][0] = moves[2][0]
           removable_piece[2][1] = moves[2][1]
+        } else if (
+          board_place[moves[2][0]][moves[2][1]] === 1 ||
+          board_place[moves[2][0]][moves[2][1]] === 3
+        ) {
+          new_moves[2][0] = false
+          new_moves[2][1] = false
         } else {
           new_moves[2][0] = moves[2][0]
           new_moves[2][1] = moves[2][1]
@@ -378,9 +386,17 @@ const removable_blocks = (moves, classname) => {
           new_moves[3][1] = moves[3][1] + 1
           removable_piece[3][0] = moves[3][0]
           removable_piece[3][1] = moves[3][1]
-        } else {
+        } else if (
+          board_place[moves[3][0]][moves[3][1]] === 1 ||
+          board_place[moves[3][0]][moves[3][1]] === 3
+        ) {
           new_moves[3][0] = false
           new_moves[3][1] = false
+        } else {
+          new_moves[3][0] = moves[3][0]
+          new_moves[3][1] = moves[3][1]
+          removable_piece[3][0] = false
+          removable_piece[3][1] = false
         }
         break
       case 'cr-op-piece':
@@ -389,9 +405,15 @@ const removable_blocks = (moves, classname) => {
           board_place[moves[0][0]][moves[0][1]] === 3
         ) {
           new_moves[0][0] = moves[0][0] - 1
-          new_moves[0][1] = moves[0][1] - 1
+          new_moves[0][1] = moves[0][1] + 1
           removable_piece[0][0] = moves[0][0]
           removable_piece[0][1] = moves[0][1]
+        } else if (
+          board_place[moves[0][0]][moves[0][1]] === 2 ||
+          board_place[moves[0][0]][moves[0][1]] === 4
+        ) {
+          new_moves[0][0] = false
+          new_moves[0][1] = false
         } else {
           new_moves[0][0] = moves[0][0]
           new_moves[0][1] = moves[0][1]
@@ -402,10 +424,16 @@ const removable_blocks = (moves, classname) => {
           board_place[moves[1][0]][moves[1][1]] === 1 ||
           board_place[moves[1][0]][moves[1][1]] === 3
         ) {
-          new_moves[1][0] = moves[1][0] + 1
+          new_moves[1][0] = moves[1][0] - 1
           new_moves[1][1] = moves[1][1] - 1
           removable_piece[1][0] = moves[1][0]
           removable_piece[1][1] = moves[1][1]
+        } else if (
+          board_place[moves[1][0]][moves[1][1]] === 2 ||
+          board_place[moves[1][0]][moves[1][1]] === 4
+        ) {
+          new_moves[1][0] = false
+          new_moves[1][1] = false
         } else {
           new_moves[1][0] = moves[1][0]
           new_moves[1][1] = moves[1][1]
@@ -420,6 +448,12 @@ const removable_blocks = (moves, classname) => {
           new_moves[2][1] = moves[0][1] - 1
           removable_piece[2][0] = moves[0][0]
           removable_piece[2][1] = moves[0][1]
+        } else if (
+          board_place[moves[2][0]][moves[2][1]] === 2 ||
+          board_place[moves[2][0]][moves[2][1]] === 4
+        ) {
+          new_moves[2][0] = false
+          new_moves[2][1] = false
         } else {
           new_moves[2][0] = moves[0][0]
           new_moves[2][1] = moves[0][1]
@@ -432,6 +466,12 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[3][0] = moves[0][0] + 1
           new_moves[3][1] = moves[0][1] + 1
+        } else if (
+          board_place[moves[3][0]][moves[3][1]] === 2 ||
+          board_place[moves[3][0]][moves[3][1]] === 4
+        ) {
+          new_moves[3][0] = false
+          new_moves[3][1] = false
         } else {
           new_moves[3][0] = moves[0][0]
           new_moves[3][1] = moves[0][1]
@@ -441,8 +481,10 @@ const removable_blocks = (moves, classname) => {
         break
     }
   }
+  complete = 1
   moves_removables.moves = new_moves
   moves_removables.removables = removable_piece
+  moves_removables.complete = complete
   return moves_removables
 }
 
@@ -502,68 +544,3 @@ for (let i = 0; i < blocks.length; i++) {
     //update_board()
   })
 }
-// for (let i = 0; i < blocks.length; i++) {
-//   blocks[i].addEventListener('click', () => {
-//     if (blocks[i].value > 0) {
-//       if (
-//         turn === 1 &&
-//         !blocks[i].classList.contains('op-piece') &&
-//         !blocks[i].classList.contains('cr-op-piece')
-//       ) {
-//         if (
-//           blocks[i].value === 1 ||
-//           blocks[i].value === 9 ||
-//           blocks[i].value === 17 ||
-//           blocks[i].value === 21
-//         ) {
-//           blocks[i].classList.toggle('piece')
-//           if (
-//             !blocks[i].classList.contains('piece') &&
-//             !blocks[i].classList.contains('cr-piece') &&
-//             !blocks[i].classList.contains('op-piece') &&
-//             !blocks[i].classList.contains('cr-op-piece')
-//           ) {
-//             blocks[i + 9].classList.toggle('highlight')
-//           }
-//         } else {
-//           blocks[i].classList.toggle('piece')
-//           if (
-//             !blocks[i].classList.contains('piece') &&
-//             !blocks[i].classList.contains('cr-piece') &&
-//             !blocks[i].classList.contains('op-piece') &&
-//             !blocks[i].classList.contains('cr-op-piece')
-//           ) {
-//             if (!blocks[i + 7].classList.contains('highlight')) {
-//               blocks[i + 7].classList.toggle('highlight')
-//               turn = 0
-//             }
-//             blocks[i + 9].classList.toggle('highlight')
-//             turn = 0
-//           }
-
-//           if (turn === 0 && blocks[i].classList.contains('highlight')) {
-//             blocks[i].classList.toggle('piece')
-//           }
-//         }
-//       }
-//     }
-//     update_board()
-//   })
-// }
-
-//if piece exists blocks[i].value[3] == 1 else 0
-// for (let i = 0; i < blocks.length; i++) {
-//   if (
-//     blocks[i].classList.contains('piece') ||
-//     blocks[i].classList.contains('cr-piece') ||
-//     blocks[i].classList.contains('op-piece') ||
-//     blocks[i].classList.contains('cr-op-piece')
-//   ) {
-//     blocks[i].value[3] = 1
-//   } else {
-//     blocks[i].value[3] = 0
-//   }
-// }
-// blocks.forEach((block) => {
-//   console.log(block.value)
-// })
