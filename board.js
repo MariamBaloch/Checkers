@@ -1,6 +1,10 @@
 //Assigned values to each board block
 let blocks = document.querySelectorAll('.board-block')
 let turn = 1
+let scoreP1 = 0
+let scoreP2 = 0
+let remaningPiecesP1 = 12
+let remaningPiecesP2 = 12
 
 //adding co-ordinates
 let x = 1
@@ -37,18 +41,6 @@ for (let i = 0; i < blocks.length; i++) {
   blocks[i].innerText = `(${blocks[i].value[0]} , ${blocks[i].value[1]})`
 }
 
-// 1-piece 2 = op-piece 3 = cr-piece 4-cr-op-piece 0=nothing h=highlight
-// let board_place = [
-//   [1, 0, 1, 0, 1, 0, 1, 0],
-//   [0, 1, 0, 1, 0, 1, 0, 1],
-//   [1, 0, 1, 0, 1, 0, 1, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 2, 0, 2, 0, 2, 0, 2],
-//   [2, 0, 2, 0, 2, 0, 2, 0],
-//   [0, 2, 0, 2, 0, 2, 0, 2]
-// ]
-
 let board_place = [
   [0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
   [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
@@ -74,7 +66,7 @@ const crown_piece = () => {
     }
   }
 }
-//crown pieces that reach the end line
+//crown pieces that reach the end line .
 //update board visually
 const update_board = () => {
   let k = 0
@@ -132,9 +124,11 @@ const update_board = () => {
 
 update_board()
 // reset the highlighting once move has been made
+
 const reset_highlight = () => {
-  for (let i = 0; i < board_place.length; i++) {
-    for (let j = 0; j < 8; j++) {
+  debugger
+  for (let i = 1; i < board_place.length; i++) {
+    for (let j = 1; j < 9; j++) {
       if (board_place[i][j] === 'h') {
         board_place[i][j] = 0
         update_board()
@@ -142,30 +136,11 @@ const reset_highlight = () => {
     }
   }
 }
-// need to fix this
-// const make_move = (x, y, moves) => {
-//   let complete = 0
-//   if (board_place[x][y] === 'h') {
-//     if (x === moves[0][0] && y === moves[0][1]) {
-//       // board_place[x][y] = 0
-//       board_place[moves[0][0]][moves[0][1]] = 1
-//       complete = 1
-//     } else if (x === moves[1][0] && y === moves[1][1]) {
-//       // board_place[x][y] = 0
-//       board_place[moves[1][0]][moves[1][1]] = 1
-//       complete = 1
-//     }
-//   }
-//   reset_highlight()
-//   update_board()
-//   return complete
-// }
 
 const make_move = (x, y, new_moves, prevX, prevY, prevClassName) => {
-  let complete = 0
+  let remove = 0
   let moves = new_moves.moves
   let removable_pieces = new_moves.removables
-  let remove = []
 
   for (let i = 0; i < moves.length; i++) {
     if (x === moves[i][0] && y === moves[i][1]) {
@@ -186,13 +161,13 @@ const make_move = (x, y, new_moves, prevX, prevY, prevClassName) => {
       }
       if (removable_pieces[i][0] !== false && removable_pieces[i][0] != false) {
         board_place[[removable_pieces[i][0]]][[removable_pieces[i][1]]] = 0
+        remove = 1
       }
     }
   }
-
   reset_highlight()
   update_board()
-  return complete
+  return remove
 }
 //highlighting movable blocks
 const hightlight_movable_blocks = (new_moves) => {
@@ -568,7 +543,11 @@ const removable_blocks = (moves, classname) => {
   moves_removables.complete = complete
   return moves_removables
 }
-
+if (turn === 1) {
+  document.querySelector('#turnP1').innerHTML = "Player 1's turn !"
+} else if (turn === 2) {
+  document.querySelector('#turnP2').innerHTML = "Player 2's turn !"
+}
 //event listener
 let click = 0
 let prevValues = []
@@ -584,7 +563,7 @@ for (let i = 0; i < blocks.length; i++) {
     let prevX = prevValues[prevValues.length - 6]
     let prevY = prevValues[prevValues.length - 5]
     let prevClass = prevValues[prevValues.length - 4]
-
+    let removed = 0
     let complete
     let new_moves
     console.log('click: ' + click)
@@ -626,11 +605,26 @@ for (let i = 0; i < blocks.length; i++) {
         moves = movable_blocks(prevX, prevY, prevClass)
         new_moves = removable_blocks(moves, prevClass)
         console.log(new_moves)
-        make_move(x, y, new_moves, prevX, prevY, prevClass)
+        removed = make_move(x, y, new_moves, prevX, prevY, prevClass)
+        if (removed === 1) {
+          scoreP1++
+          remaningPiecesP2--
+          document.querySelector('#scoreP1').innerHTML = scoreP1
+          document.querySelector('#rem-piecesP2').innerHTML = remaningPiecesP2
+          console.log('score is: ' + scoreP1)
+        }
         turn = 2
         click = 0
+        document.querySelector('#turnP2').innerHTML = "Player 2's turn !"
+        document.querySelector('#turnP1').innerHTML = 'Player 1'
         console.log('koko')
         //debugger
+        if (scoreP1 === 12) {
+          document.querySelector('.main').style.display = 'none'
+          document.querySelector('#forfeit').style.display = 'none'
+          document.querySelector('#player').innerText = 'Player 1'
+          document.querySelector('#result').style.display = 'block'
+        }
       }
     }
     if (
@@ -643,6 +637,7 @@ for (let i = 0; i < blocks.length; i++) {
       board_place[x][y] !== 3
     ) {
       console.log("its 2's turn")
+
       click++
       console.log('click: ' + click)
 
@@ -674,9 +669,25 @@ for (let i = 0; i < blocks.length; i++) {
         moves = movable_blocks(prevX, prevY, prevClass)
         new_moves = removable_blocks(moves, prevClass)
         console.log(new_moves)
-        make_move(x, y, new_moves, prevX, prevY, prevClass)
+        removed = make_move(x, y, new_moves, prevX, prevY, prevClass)
+        if (removed === 1) {
+          scoreP2++
+          remaningPiecesP1--
+          document.querySelector('#scoreP2').innerHTML = scoreP2
+          document.querySelector('#rem-piecesP1').innerHTML = remaningPiecesP1
+          console.log('score is: ' + scoreP1)
+        }
+        document.querySelector('#turnP1').innerHTML = "Player 1's turn !"
+        document.querySelector('#turnP2').innerHTML = 'Player 2'
         turn = 1
         click = 1
+      }
+      if (scoreP2 === 12) {
+        console.log(scoreP2)
+        document.querySelector('.main').style.display = 'none'
+        document.querySelector('#forfeit').style.display = 'none'
+        document.querySelector('#player').innerText = 'Player 2'
+        document.querySelector('#result').style.display = 'block'
       }
     }
   })

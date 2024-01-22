@@ -10,7 +10,7 @@
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
   margin: 70px 50px;
   min-height: 500px;
-  flex-grow: 2;
+  flex-grow: 3;
 }
 
 .board-block {
@@ -32,10 +32,9 @@
 }
 .stats {
   flex-grow: 2;
-  text-align: center;
   background-color: teal;
   margin: 0 40px;
-  padding: 120px 0px;
+  min-height: 200px;
 }
 #forfeit {
   margin: 0 49%;
@@ -67,4 +66,12 @@
 }
 .highlight {
   background-color: yellow !important;
+}
+#result {
+  text-align: center;
+  display: none;
+}
+.pieces-info {
+  margin: 7px;
+  background-color: white;
 }

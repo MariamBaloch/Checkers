@@ -14,7 +14,11 @@
     </header>
     <div class="main">
       <div class="stats" id="player1-stats">
-        <p>aaa</p>
+        <h3 id="turnP1">Player 1</h3>
+        <div class="pieces-info">
+          <p>Score: <span id="scoreP1">0</span></p>
+          <p>Remaning pieces: <span id="rem-piecesP1">12</span></p>
+        </div>
       </div>
       <div id="board">
         <div class="board-block"></div>
@@ -83,8 +87,15 @@
         <div class="board-block"></div>
       </div>
       <div class="stats" id="player2-stats">
-        <p>aa</p>
+        <h3 id="turnP2">Player 2</h3>
+        <div class="pieces-info">
+          <p>Score: <span id="scoreP2">0</span></p>
+          <p>Remaning pieces: <span id="rem-piecesP2">12</span></p>
+        </div>
       </div>
+    </div>
+    <div id="result">
+      <p><span id="player"></span> has won !</p>
     </div>
     <button id="forfeit">Forfeit</button>
   </body>
