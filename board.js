@@ -41,28 +41,16 @@ for (let i = 0; i < blocks.length; i++) {
   blocks[i].innerText = `(${blocks[i].value[0]} , ${blocks[i].value[1]})`
 }
 
-// let board_place = [
-//   [0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
-//   [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
-//   [0, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-//   [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-//   [0, 0, 2, 0, 2, 0, 2, 0, 2, 0],
-//   [0, 2, 0, 2, 0, 2, 0, 2, 0, 0],
-//   [0, 0, 2, 0, 2, 0, 2, 0, 2, 0],
-//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-// ]
 let board_place = [
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
   [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
-  [0, 0, 0, 0, 0, 0, 2, 0, 0, 0],
-  [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 2, 0, 0, 0],
-  [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-  [0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+  [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 2, 0, 2, 0, 2, 0, 2, 0],
+  [0, 2, 0, 2, 0, 2, 0, 2, 0, 0],
+  [0, 0, 2, 0, 2, 0, 2, 0, 2, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]
 
@@ -605,9 +593,18 @@ const double_jump = (x, y, classname) => {
   let new_moves = removable_blocks(original_moves, classname)
   let removable_pieces = new_moves.removables
   let moves2 = new_moves.moves
-  debugger
+
   for (let i = 0; i < removable_pieces.length; i++) {
-    if (removable_pieces[i][0] !== false && removable_pieces[i][0] != false) {
+    if (
+      removable_pieces[i][0] !== false &&
+      removable_pieces[i][0] !== false &&
+      moves2[i][0] !== false &&
+      moves2[i][1] !== false &&
+      moves2[i][0] !== 0 &&
+      moves2[i][0] !== 9 &&
+      moves2[i][1] !== 0 &&
+      moves2[i][1] !== 9
+    ) {
       removable_status = true
       movable_places[i][0] = moves2[i][0]
       movable_places[i][1] = moves2[i][1]
@@ -696,7 +693,6 @@ for (let i = 0; i < blocks.length; i++) {
 
         if (double_jump(x, y, prevClass).removable_status === true) {
           click = 3
-
           hightlight_movable_blocks(double_jump(x, y, prevClass))
         } else {
           turn = 2
@@ -707,10 +703,6 @@ for (let i = 0; i < blocks.length; i++) {
         }
       }
       if (click === 4) {
-        console.log('mom i made it !')
-        // moves = movable_blocks(prevX, prevY, prevClass)
-        // new_moves = removable_blocks(moves, prevClass)
-
         removed = make_move(
           x,
           y,
@@ -787,6 +779,7 @@ for (let i = 0; i < blocks.length; i++) {
           document.querySelector('#rem-piecesP1').innerHTML = remaningPiecesP1
           console.log('score is: ' + scoreP1)
         }
+
         if (double_jump(x, y, prevClass).removable_status === true) {
           click = 3
           hightlight_movable_blocks(double_jump(x, y, prevClass))
