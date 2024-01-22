@@ -75,3 +75,15 @@
   margin: 7px;
   background-color: white;
 }
+.highlight-movables {
+  outline: 4px yellow ridge;
+  outline-offset: 1px;
+  z-index: 1000;
+  animation: blink 0.9s;
+  animation-iteration-count: infinite;
+}
+@keyframes blink {
+  50% {
+    outline-color: purple;
+  }
+}

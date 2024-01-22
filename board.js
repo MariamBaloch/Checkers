@@ -40,13 +40,14 @@ for (let i = 0; i < blocks.length; i += 2) {
 for (let i = 0; i < blocks.length; i++) {
   blocks[i].innerText = `(${blocks[i].value[0]} , ${blocks[i].value[1]})`
 }
+//showing player turn
 
 let board_place = [
-  [0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
   [0, 0, 1, 0, 1, 0, 1, 0, 1, 0],
   [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
-  [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 2, 0, 2, 0, 2, 0, 2, 0],
   [0, 2, 0, 2, 0, 2, 0, 2, 0, 0],
@@ -218,6 +219,8 @@ const removable_blocks = (moves, classname) => {
   new_moves = [[], [], [], []]
   let removable_piece = [[], [], [], []]
   let moves_removables = {}
+
+  //check if this loop even needed?
   for (let i = 0; i < moves.length; i++) {
     switch (classname) {
       case 'piece':
@@ -578,11 +581,6 @@ const displayWin = (turn) => {
     document.querySelector('#result').style.display = 'block'
   }
 }
-if (turn === 1) {
-  document.querySelector('#turnP1').innerHTML = "Player 1's turn !"
-} else if (turn === 2) {
-  document.querySelector('#turnP2').innerHTML = "Player 2's turn !"
-}
 
 const double_jump = (x, y, classname) => {
   let result = {}
@@ -623,6 +621,134 @@ const double_jump = (x, y, classname) => {
   return result
 }
 
+const highlight_movable_pieces = (turn) => {
+  let classname
+  let movables
+  let counterP1 = 0
+  let temp = 0
+  let counterP2 = 0
+  for (let i = 1; i < board_place.length; i++) {
+    for (let j = 1; j < 9; j++) {
+      if (turn === 1) {
+        if (board_place[i][j] === 1 || board_place[i][j] === 3) {
+          if (board_place[i][j] === 1) {
+            classname = 'piece'
+          } else if (board_place[i][j] === 3) {
+            classname = 'cr-piece'
+          }
+          movables = removable_blocks(
+            movable_blocks(i, j, classname),
+            classname
+          ).moves
+          temp = 0
+          for (let k = 0; k < movables.length; k++) {
+            if (
+              movables[k][0] !== false &&
+              movables[k][0] !== false &&
+              movables[k][0] !== false &&
+              movables[k][1] !== false &&
+              movables[k][0] !== 0 &&
+              movables[k][0] !== 9 &&
+              movables[k][1] !== 0 &&
+              movables[k][1] !== 9
+            ) {
+              temp = 1
+            }
+          }
+          if (temp > 0) {
+            blocks.forEach((block) => {
+              if (block.value[0] === i && block.value[1] === j) {
+                block.classList.toggle('highlight-movables')
+              }
+            })
+            counterP1++
+          }
+        }
+      } else if (turn === 2) {
+        if (board_place[i][j] === 2 || board_place[i][j] === 4) {
+          if (board_place[i][j] === 2) {
+            classname = 'op-piece'
+          } else if (board_place[i][j] === 4) {
+            classname = 'cr-op-piece'
+          }
+          movables = removable_blocks(
+            movable_blocks(i, j, classname),
+            classname
+          ).moves
+          temp = 0
+          for (let k = 0; k < movables.length; k++) {
+            if (
+              movables[k][0] !== false &&
+              movables[k][0] !== false &&
+              movables[k][0] !== false &&
+              movables[k][1] !== false &&
+              movables[k][0] !== 0 &&
+              movables[k][0] !== 9 &&
+              movables[k][1] !== 0 &&
+              movables[k][1] !== 9
+            ) {
+              temp = 1
+            }
+          }
+          if (temp > 0) {
+            blocks.forEach((block) => {
+              if (block.value[0] === i && block.value[1] === j) {
+                block.classList.toggle('highlight-movables')
+              }
+            })
+            counterP2++
+          }
+        }
+      }
+    }
+  }
+
+  if (turn === 1) {
+    for (let i = 1; i < board_place.length; i++) {
+      for (let j = 1; j < 9; j++) {
+        if (board_place[i][j] === 2 || board_place[i][j] === 4) {
+          blocks.forEach((block) => {
+            if (block.value[0] === i && block.value[1] === j) {
+              if (block.classList.contains('highlight-movables'))
+                block.classList.toggle('highlight-movables')
+            }
+          })
+        }
+      }
+    }
+    if (counterP1 === 0) {
+      displayWin(2)
+    } else {
+      return counterP1
+    }
+  } else {
+    for (let i = 1; i < board_place.length; i++) {
+      for (let j = 1; j < 9; j++) {
+        if (board_place[i][j] === 1 || board_place[i][j] === 3) {
+          blocks.forEach((block) => {
+            if (block.value[0] === i && block.value[1] === j) {
+              if (block.classList.contains('highlight-movables'))
+                block.classList.toggle('highlight-movables')
+            }
+          })
+        }
+      }
+    }
+    if (counterP2 === 0) {
+      displayWin(1)
+    } else {
+      return counterP1
+    }
+  }
+}
+
+if (turn === 1) {
+  document.querySelector('#turnP1').innerHTML = "Player 1's turn !"
+  highlight_movable_pieces(1)
+} else if (turn === 2) {
+  document.querySelector('#turnP2').innerHTML = "Player 2's turn !"
+  highlight_movable_pieces(2)
+}
 //event listener
 let click = 0
 let prevValues = []
@@ -652,6 +778,7 @@ for (let i = 0; i < blocks.length; i++) {
       if (scoreP1 === 12) {
         displayWin(turn)
       }
+
       click++
       console.log('click: ' + click)
       console.log('turn 1')
@@ -699,7 +826,7 @@ for (let i = 0; i < blocks.length; i++) {
           click = 0
           document.querySelector('#turnP2').innerHTML = "Player 2's turn !"
           document.querySelector('#turnP1').innerHTML = 'Player 1'
-          console.log('koko')
+          highlight_movable_pieces(2)
         }
       }
       if (click === 4) {
@@ -722,7 +849,7 @@ for (let i = 0; i < blocks.length; i++) {
         click = 0
         document.querySelector('#turnP2').innerHTML = "Player 2's turn !"
         document.querySelector('#turnP1').innerHTML = 'Player 1'
-        console.log('koko')
+        highlight_movable_pieces(2)
       }
     }
     if (
@@ -738,6 +865,7 @@ for (let i = 0; i < blocks.length; i++) {
         console.log(scoreP2)
         displayWin(turn)
       }
+
       console.log("its 2's turn")
 
       click++
@@ -788,6 +916,7 @@ for (let i = 0; i < blocks.length; i++) {
           document.querySelector('#turnP2').innerHTML = 'Player 2'
           turn = 1
           click = 1
+          highlight_movable_pieces(1) === 0
         }
       }
       if (click === 4) {
@@ -809,6 +938,7 @@ for (let i = 0; i < blocks.length; i++) {
         document.querySelector('#turnP1').innerHTML = "Player 1's turn !"
         document.querySelector('#turnP2').innerHTML = 'Player 2'
         turn = 1
+        highlight_movable_pieces(1) === 0
         click = 1
       }
     }
