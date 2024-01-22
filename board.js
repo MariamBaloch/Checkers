@@ -41,16 +41,28 @@ for (let i = 0; i < blocks.length; i++) {
   blocks[i].innerText = `(${blocks[i].value[0]} , ${blocks[i].value[1]})`
 }
 
+// let board_place = [
+//   [0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+//   [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+//   [0, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+//   [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+//   [0, 0, 2, 0, 2, 0, 2, 0, 2, 0],
+//   [0, 2, 0, 2, 0, 2, 0, 2, 0, 0],
+//   [0, 0, 2, 0, 2, 0, 2, 0, 2, 0],
+//   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+// ]
 let board_place = [
-  [0, 0, 0, 1, 0, 1, 0, 0, 0, 0],
-  [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
-  [0, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-  [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 2, 0, 2, 0, 2, 0, 2, 0],
-  [0, 2, 0, 2, 0, 2, 0, 2, 0, 0],
-  [0, 0, 2, 0, 2, 0, 2, 0, 2, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 2, 0, 0, 0],
+  [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 2, 0, 0, 0],
+  [0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+  [0, 0, 2, 0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 ]
 
@@ -126,7 +138,6 @@ update_board()
 // reset the highlighting once move has been made
 
 const reset_highlight = () => {
-  debugger
   for (let i = 1; i < board_place.length; i++) {
     for (let j = 1; j < 9; j++) {
       if (board_place[i][j] === 'h') {
@@ -136,7 +147,6 @@ const reset_highlight = () => {
     }
   }
 }
-
 const make_move = (x, y, new_moves, prevX, prevY, prevClassName) => {
   let remove = 0
   let moves = new_moves.moves
@@ -241,6 +251,8 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[0][0] = false
           new_moves[0][1] = false
+          removable_piece[0][0] = false
+          removable_piece[0][1] = false
         } else {
           new_moves[0][0] = moves[0][0]
           new_moves[0][1] = moves[0][1]
@@ -265,6 +277,8 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[1][0] = false
           new_moves[1][1] = false
+          removable_piece[1][0] = false
+          removable_piece[1][1] = false
         } else {
           new_moves[1][0] = moves[1][0]
           new_moves[1][1] = moves[1][1]
@@ -299,6 +313,8 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[0][0] = false
           new_moves[0][1] = false
+          removable_piece[0][0] = false
+          removable_piece[0][1] = false
         } else {
           new_moves[0][0] = moves[0][0]
           new_moves[0][1] = moves[0][1]
@@ -323,6 +339,8 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[1][0] = false
           new_moves[1][1] = false
+          removable_piece[1][0] = false
+          removable_piece[1][1] = false
         } else {
           new_moves[1][0] = moves[1][0]
           new_moves[1][1] = moves[1][1]
@@ -357,6 +375,8 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[0][0] = false
           new_moves[0][1] = false
+          removable_piece[0][0] = false
+          removable_piece[0][1] = false
         } else {
           new_moves[0][0] = moves[0][0]
           new_moves[0][1] = moves[0][1]
@@ -381,6 +401,8 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[1][0] = false
           new_moves[1][1] = false
+          removable_piece[1][0] = false
+          removable_piece[1][1] = false
         } else {
           new_moves[1][0] = moves[1][0]
           new_moves[1][1] = moves[1][1]
@@ -405,6 +427,8 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[2][0] = false
           new_moves[2][1] = false
+          removable_piece[2][0] = false
+          removable_piece[2][1] = false
         } else {
           new_moves[2][0] = moves[2][0]
           new_moves[2][1] = moves[2][1]
@@ -429,6 +453,8 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[3][0] = false
           new_moves[3][1] = false
+          removable_piece[3][0] = false
+          removable_piece[3][1] = false
         } else {
           new_moves[3][0] = moves[3][0]
           new_moves[3][1] = moves[3][1]
@@ -455,6 +481,8 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[0][0] = false
           new_moves[0][1] = false
+          removable_piece[0][0] = false
+          removable_piece[0][1] = false
         } else {
           new_moves[0][0] = moves[0][0]
           new_moves[0][1] = moves[0][1]
@@ -479,6 +507,8 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[1][0] = false
           new_moves[1][1] = false
+          removable_piece[1][0] = false
+          removable_piece[1][1] = false
         } else {
           new_moves[1][0] = moves[1][0]
           new_moves[1][1] = moves[1][1]
@@ -503,6 +533,8 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[2][0] = false
           new_moves[2][1] = false
+          removable_piece[2][0] = false
+          removable_piece[2][1] = false
         } else {
           new_moves[2][0] = moves[2][0]
           new_moves[2][1] = moves[2][1]
@@ -527,6 +559,8 @@ const removable_blocks = (moves, classname) => {
         ) {
           new_moves[3][0] = false
           new_moves[3][1] = false
+          removable_piece[3][0] = false
+          removable_piece[3][1] = false
         } else {
           new_moves[3][0] = moves[3][0]
           new_moves[3][1] = moves[3][1]
@@ -543,11 +577,55 @@ const removable_blocks = (moves, classname) => {
   moves_removables.complete = complete
   return moves_removables
 }
+const displayWin = (turn) => {
+  if (turn === 1) {
+    document.querySelector('.main').style.display = 'none'
+    document.querySelector('#forfeit').style.display = 'none'
+    document.querySelector('#player').innerText = 'Player 1'
+    document.querySelector('#result').style.display = 'block'
+  } else if (turn === 2) {
+    document.querySelector('.main').style.display = 'none'
+    document.querySelector('#forfeit').style.display = 'none'
+    document.querySelector('#player').innerText = 'Player 2'
+    document.querySelector('#result').style.display = 'block'
+  }
+}
 if (turn === 1) {
   document.querySelector('#turnP1').innerHTML = "Player 1's turn !"
 } else if (turn === 2) {
   document.querySelector('#turnP2').innerHTML = "Player 2's turn !"
 }
+
+const double_jump = (x, y, classname) => {
+  let result = {}
+  let removable_status = false
+  let movable_places = [[], [], [], []]
+  let removables = [[], [], [], []]
+  let original_moves = movable_blocks(x, y, classname)
+  let new_moves = removable_blocks(original_moves, classname)
+  let removable_pieces = new_moves.removables
+  let moves2 = new_moves.moves
+  debugger
+  for (let i = 0; i < removable_pieces.length; i++) {
+    if (removable_pieces[i][0] !== false && removable_pieces[i][0] != false) {
+      removable_status = true
+      movable_places[i][0] = moves2[i][0]
+      movable_places[i][1] = moves2[i][1]
+      removables[i][0] = removable_pieces[i][0]
+      removables[i][1] = removable_pieces[i][1]
+    } else {
+      movable_places[i][0] = false
+      movable_places[i][1] = false
+      removables[i][0] = false
+      removables[i][1] = false
+    }
+  }
+  result.removable_status = removable_status
+  result.moves = movable_places
+  result.removables = removables
+  return result
+}
+
 //event listener
 let click = 0
 let prevValues = []
@@ -574,6 +652,9 @@ for (let i = 0; i < blocks.length; i++) {
       classname !== 'cr-op-piece' &&
       board_place[x][y] !== 0
     ) {
+      if (scoreP1 === 12) {
+        displayWin(turn)
+      }
       click++
       console.log('click: ' + click)
       console.log('turn 1')
@@ -585,7 +666,7 @@ for (let i = 0; i < blocks.length; i++) {
           console.log('complete ' + complete)
         }
       }
-      // debugger
+
       if (click === 2) {
         if (board_place[x][y] === 'h' && board_place[x][y] !== 0) {
           click = 3
@@ -604,8 +685,40 @@ for (let i = 0; i < blocks.length; i++) {
         //add moving pieces function which if completed returns 1
         moves = movable_blocks(prevX, prevY, prevClass)
         new_moves = removable_blocks(moves, prevClass)
-        console.log(new_moves)
         removed = make_move(x, y, new_moves, prevX, prevY, prevClass)
+        if (removed === 1) {
+          scoreP1++
+          remaningPiecesP2--
+          document.querySelector('#scoreP1').innerHTML = scoreP1
+          document.querySelector('#rem-piecesP2').innerHTML = remaningPiecesP2
+          console.log('score is: ' + scoreP1)
+        }
+
+        if (double_jump(x, y, prevClass).removable_status === true) {
+          click = 3
+
+          hightlight_movable_blocks(double_jump(x, y, prevClass))
+        } else {
+          turn = 2
+          click = 0
+          document.querySelector('#turnP2').innerHTML = "Player 2's turn !"
+          document.querySelector('#turnP1').innerHTML = 'Player 1'
+          console.log('koko')
+        }
+      }
+      if (click === 4) {
+        console.log('mom i made it !')
+        // moves = movable_blocks(prevX, prevY, prevClass)
+        // new_moves = removable_blocks(moves, prevClass)
+
+        removed = make_move(
+          x,
+          y,
+          double_jump(prevX, prevY, prevValues[prevValues.length - 7]),
+          prevX,
+          prevY,
+          prevValues[prevValues.length - 7]
+        )
         if (removed === 1) {
           scoreP1++
           remaningPiecesP2--
@@ -618,13 +731,6 @@ for (let i = 0; i < blocks.length; i++) {
         document.querySelector('#turnP2').innerHTML = "Player 2's turn !"
         document.querySelector('#turnP1').innerHTML = 'Player 1'
         console.log('koko')
-        //debugger
-        if (scoreP1 === 12) {
-          document.querySelector('.main').style.display = 'none'
-          document.querySelector('#forfeit').style.display = 'none'
-          document.querySelector('#player').innerText = 'Player 1'
-          document.querySelector('#result').style.display = 'block'
-        }
       }
     }
     if (
@@ -636,6 +742,10 @@ for (let i = 0; i < blocks.length; i++) {
       board_place[x][y] !== 1 &&
       board_place[x][y] !== 3
     ) {
+      if (scoreP2 === 12) {
+        console.log(scoreP2)
+        displayWin(turn)
+      }
       console.log("its 2's turn")
 
       click++
@@ -649,7 +759,7 @@ for (let i = 0; i < blocks.length; i++) {
           console.log('complete ' + complete)
         }
       }
-      // debugger
+
       if (click === 2) {
         if (board_place[x][y] === 'h' && board_place[x][y] !== 0) {
           click = 3
@@ -677,17 +787,36 @@ for (let i = 0; i < blocks.length; i++) {
           document.querySelector('#rem-piecesP1').innerHTML = remaningPiecesP1
           console.log('score is: ' + scoreP1)
         }
+        if (double_jump(x, y, prevClass).removable_status === true) {
+          click = 3
+          hightlight_movable_blocks(double_jump(x, y, prevClass))
+        } else {
+          document.querySelector('#turnP1').innerHTML = "Player 1's turn !"
+          document.querySelector('#turnP2').innerHTML = 'Player 2'
+          turn = 1
+          click = 1
+        }
+      }
+      if (click === 4) {
+        removed = make_move(
+          x,
+          y,
+          double_jump(prevX, prevY, prevValues[prevValues.length - 7]),
+          prevX,
+          prevY,
+          prevValues[prevValues.length - 7]
+        )
+        if (removed === 1) {
+          scoreP2++
+          remaningPiecesP1--
+          document.querySelector('#scoreP2').innerHTML = scoreP2
+          document.querySelector('#rem-piecesP1').innerHTML = remaningPiecesP1
+          console.log('score is: ' + scoreP1)
+        }
         document.querySelector('#turnP1').innerHTML = "Player 1's turn !"
         document.querySelector('#turnP2').innerHTML = 'Player 2'
         turn = 1
         click = 1
-      }
-      if (scoreP2 === 12) {
-        console.log(scoreP2)
-        document.querySelector('.main').style.display = 'none'
-        document.querySelector('#forfeit').style.display = 'none'
-        document.querySelector('#player').innerText = 'Player 2'
-        document.querySelector('#result').style.display = 'block'
       }
     }
   })
