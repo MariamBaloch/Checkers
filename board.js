@@ -1,14 +1,30 @@
-//Assigned values to each board block
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Global Variables Here
 let blocks = document.querySelectorAll('.board-block')
 let turn = 1
 let scoreP1 = 0
 let scoreP2 = 0
 let remaningPiecesP1 = 12
 let remaningPiecesP2 = 12
-
-//adding co-ordinates
 let x = 1
 let y = 1
+let board_place = [
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+  [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 2, 0, 2, 0, 2, 0, 2, 0],
+  [0, 2, 0, 2, 0, 2, 0, 2, 0, 0],
+  [0, 0, 2, 0, 2, 0, 2, 0, 2, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+]
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Important Loops
+
+//Assigning values to each board block
 for (let i = 0; i < blocks.length; i++) {
   if (y >= 9) {
     x++
@@ -17,7 +33,8 @@ for (let i = 0; i < blocks.length; i++) {
   blocks[i].value = [x, y]
   y++
 }
-//adding spaces that pieces can be moved to
+
+//Adding spaces that pieces can be moved to in values
 for (let i = 0; i < blocks.length; i += 2) {
   if (i === 8 || i === 24 || i === 40 || i === 56) {
     i--
@@ -36,25 +53,10 @@ for (let i = 0; i < blocks.length; i += 2) {
   }
 }
 
-//showing co-ordinates for helping meee
-for (let i = 0; i < blocks.length; i++) {
-  blocks[i].innerText = `(${blocks[i].value[0]} , ${blocks[i].value[1]})`
-}
-//showing player turn
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Functions Here
 
-let board_place = [
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
-  [0, 0, 1, 0, 1, 0, 1, 0, 1, 0],
-  [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 2, 0, 2, 0, 2, 0, 2, 0],
-  [0, 2, 0, 2, 0, 2, 0, 2, 0, 0],
-  [0, 0, 2, 0, 2, 0, 2, 0, 2, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-]
-
+// Crowning pieces that have reached the opposite end
 const crown_piece = () => {
   for (let i = 0; i < board_place[8].length; i++) {
     if (board_place[8][i] === 1) {
@@ -67,8 +69,8 @@ const crown_piece = () => {
     }
   }
 }
-//crown pieces that reach the end line .
-//update board visually
+
+//Updating Game Board on HTML page
 const update_board = () => {
   let k = 0
   for (let i = 1; i < board_place.length - 1; i++) {
@@ -122,10 +124,9 @@ const update_board = () => {
     }
   }
 }
-
 update_board()
-// reset the highlighting once move has been made
 
+//Resetting highlighted blocks
 const reset_highlight = () => {
   for (let i = 1; i < board_place.length; i++) {
     for (let j = 1; j < 9; j++) {
@@ -136,6 +137,8 @@ const reset_highlight = () => {
     }
   }
 }
+
+//Moving pieces selected
 const make_move = (x, y, new_moves, prevX, prevY, prevClassName) => {
   let remove = 0
   let moves = new_moves.moves
@@ -168,21 +171,19 @@ const make_move = (x, y, new_moves, prevX, prevY, prevClassName) => {
   update_board()
   return remove
 }
-//highlighting movable blocks
+
+//Highlighting blocks movable
 const hightlight_movable_blocks = (new_moves) => {
-  let complete = 0
   let moves = new_moves.moves
-  console.log(moves)
   moves.forEach((move) => {
     if (move[0] || move[1] !== false) {
       board_place[move[0]][move[1]] = 'h'
     }
   })
-  complete = 1
   update_board()
-  return complete
 }
-//calculate vanilla movable blocks
+
+//Calculating normal piece movement
 const movable_blocks = (x, y, classname) => {
   move1 = []
   move2 = []
@@ -213,9 +214,9 @@ const movable_blocks = (x, y, classname) => {
   }
   return [move1, move2, move3, move4]
 }
-// calculate extended movable blocks and removable pieces
+
+//Extending pieces movement calculation with removable pieces
 const removable_blocks = (moves, classname) => {
-  complete = 0
   new_moves = [[], [], [], []]
   let removable_piece = [[], [], [], []]
   let moves_removables = {}
@@ -562,12 +563,12 @@ const removable_blocks = (moves, classname) => {
     }
   }
 
-  complete = 1
   moves_removables.moves = new_moves
   moves_removables.removables = removable_piece
-  moves_removables.complete = complete
   return moves_removables
 }
+
+//Displays winning player
 const displayWin = (turn) => {
   if (turn === 1) {
     document.querySelector('.main').style.display = 'none'
@@ -582,6 +583,7 @@ const displayWin = (turn) => {
   }
 }
 
+//Calculate double jump possibility
 const double_jump = (x, y, classname) => {
   let result = {}
   let removable_status = false
@@ -621,6 +623,7 @@ const double_jump = (x, y, classname) => {
   return result
 }
 
+//Highlighting movables pieces
 const highlight_movable_pieces = (turn) => {
   let classname
   let movables
@@ -742,6 +745,10 @@ const highlight_movable_pieces = (turn) => {
   }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// GAME LOGIC
+
+// Displaying Player Turn
 if (turn === 1) {
   document.querySelector('#turnP1').innerHTML = "Player 1's turn !"
   highlight_movable_pieces(1)
@@ -749,12 +756,11 @@ if (turn === 1) {
   document.querySelector('#turnP2').innerHTML = "Player 2's turn !"
   highlight_movable_pieces(2)
 }
-//event listener
+//Event Listener
 let click = 0
 let prevValues = []
 for (let i = 0; i < blocks.length; i++) {
   blocks[i].addEventListener('click', () => {
-    console.log('i am here ' + blocks[i].value)
     let classname = blocks[i].classList[1]
     let x = blocks[i].value[0]
     let y = blocks[i].value[1]
@@ -765,9 +771,7 @@ for (let i = 0; i < blocks.length; i++) {
     let prevY = prevValues[prevValues.length - 5]
     let prevClass = prevValues[prevValues.length - 4]
     let removed = 0
-    let complete
     let new_moves
-    console.log('click: ' + click)
     if (
       blocks[i].value[2] === 1 &&
       turn === 1 &&
@@ -778,19 +782,12 @@ for (let i = 0; i < blocks.length; i++) {
       if (scoreP1 === 12) {
         displayWin(turn)
       }
-
       click++
-      console.log('click: ' + click)
-      console.log('turn 1')
       if (click === 1) {
         moves = movable_blocks(x, y, classname)
         new_moves = removable_blocks(moves, classname)
-        complete = hightlight_movable_blocks(new_moves)
-        if (complete === 1) {
-          console.log('complete ' + complete)
-        }
+        hightlight_movable_blocks(new_moves)
       }
-
       if (click === 2) {
         if (board_place[x][y] === 'h' && board_place[x][y] !== 0) {
           click = 3
@@ -798,15 +795,11 @@ for (let i = 0; i < blocks.length; i++) {
           reset_highlight()
           moves = movable_blocks(x, y, classname)
           new_moves = removable_blocks(moves, classname)
-          complete = hightlight_movable_blocks(new_moves)
-          if (complete === 1) {
-            console.log('complete 2 ' + complete)
-          }
+          hightlight_movable_blocks(new_moves)
           click = 1
         }
       }
       if (click === 3) {
-        //add moving pieces function which if completed returns 1
         moves = movable_blocks(prevX, prevY, prevClass)
         new_moves = removable_blocks(moves, prevClass)
         removed = make_move(x, y, new_moves, prevX, prevY, prevClass)
@@ -815,9 +808,7 @@ for (let i = 0; i < blocks.length; i++) {
           remaningPiecesP2--
           document.querySelector('#scoreP1').innerHTML = scoreP1
           document.querySelector('#rem-piecesP2').innerHTML = remaningPiecesP2
-          console.log('score is: ' + scoreP1)
         }
-
         if (double_jump(x, y, prevClass).removable_status === true) {
           click = 3
           hightlight_movable_blocks(double_jump(x, y, prevClass))
@@ -843,7 +834,6 @@ for (let i = 0; i < blocks.length; i++) {
           remaningPiecesP2--
           document.querySelector('#scoreP1').innerHTML = scoreP1
           document.querySelector('#rem-piecesP2').innerHTML = remaningPiecesP2
-          console.log('score is: ' + scoreP1)
         }
         turn = 2
         click = 0
@@ -862,24 +852,14 @@ for (let i = 0; i < blocks.length; i++) {
       board_place[x][y] !== 3
     ) {
       if (scoreP2 === 12) {
-        console.log(scoreP2)
         displayWin(turn)
       }
-
-      console.log("its 2's turn")
-
       click++
-      console.log('click: ' + click)
-
       if (click === 1) {
         moves = movable_blocks(x, y, classname)
         new_moves = removable_blocks(moves, classname)
-        complete = hightlight_movable_blocks(new_moves)
-        if (complete === 1) {
-          console.log('complete ' + complete)
-        }
+        hightlight_movable_blocks(new_moves)
       }
-
       if (click === 2) {
         if (board_place[x][y] === 'h' && board_place[x][y] !== 0) {
           click = 3
@@ -887,27 +867,20 @@ for (let i = 0; i < blocks.length; i++) {
           reset_highlight()
           moves = movable_blocks(x, y, classname)
           new_moves = removable_blocks(moves, classname)
-          complete = hightlight_movable_blocks(new_moves)
-          if (complete === 1) {
-            console.log('complete 2 ' + complete)
-          }
+          hightlight_movable_blocks(new_moves)
           click = 1
         }
       }
       if (click === 3) {
-        //add moving pieces function which if completed returns 1
         moves = movable_blocks(prevX, prevY, prevClass)
         new_moves = removable_blocks(moves, prevClass)
-        console.log(new_moves)
         removed = make_move(x, y, new_moves, prevX, prevY, prevClass)
         if (removed === 1) {
           scoreP2++
           remaningPiecesP1--
           document.querySelector('#scoreP2').innerHTML = scoreP2
           document.querySelector('#rem-piecesP1').innerHTML = remaningPiecesP1
-          console.log('score is: ' + scoreP1)
         }
-
         if (double_jump(x, y, prevClass).removable_status === true) {
           click = 3
           hightlight_movable_blocks(double_jump(x, y, prevClass))
@@ -933,7 +906,6 @@ for (let i = 0; i < blocks.length; i++) {
           remaningPiecesP1--
           document.querySelector('#scoreP2').innerHTML = scoreP2
           document.querySelector('#rem-piecesP1').innerHTML = remaningPiecesP1
-          console.log('score is: ' + scoreP1)
         }
         document.querySelector('#turnP1').innerHTML = "Player 1's turn !"
         document.querySelector('#turnP2').innerHTML = 'Player 2'
