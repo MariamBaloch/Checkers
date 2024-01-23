@@ -567,16 +567,15 @@ const removable_blocks = (moves, classname) => {
 //Displays winning player
 const displayWin = (turn) => {
   if (turn === 1) {
-    document.querySelector('.main').style.display = 'none'
-    document.querySelector('#forfeit').style.display = 'none'
     document.querySelector('#player').innerText = 'Player 1'
-    document.querySelector('#result').style.display = 'block'
   } else if (turn === 2) {
-    document.querySelector('.main').style.display = 'none'
-    document.querySelector('#forfeit').style.display = 'none'
     document.querySelector('#player').innerText = 'Player 2'
-    document.querySelector('#result').style.display = 'block'
   }
+  document.querySelector('.main').style.opacity = '0.3'
+  document.querySelector('.main').style.pointerEvents = 'none'
+  document.querySelector('#forfeit').style.opacity = '0.3'
+  document.querySelector('#forfeit').style.pointerEvents = 'none'
+  document.querySelector('#result').style.display = 'block'
 }
 
 //Calculate double jump possibility
@@ -918,3 +917,20 @@ for (let i = 0; i < blocks.length; i++) {
     }
   })
 }
+
+document.querySelector('#forfeit').addEventListener('click', () => {
+  let forfeit = confirm('Are you sure you want to surrender?')
+  if (forfeit) {
+    if (turn === 1) {
+      displayWin(2)
+    } else {
+      displayWin(1)
+    }
+  } else {
+    document.querySelector('.main').style.opacity = '1'
+    document.querySelector('.main').style.pointerEvents = 'auto'
+    document.querySelector('#forfeit').style.opacity = '1'
+    document.querySelector('#forfeit').style.pointerEvents = 'auto'
+    document.querySelector('#result').style.display = 'none'
+  }
+})

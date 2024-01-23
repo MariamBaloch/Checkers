@@ -6,18 +6,23 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="board.css" />
     <script defer src="board.js"></script>
+    
     <title>Checkers - Board</title>
   </head>
   <body>
     <header>
       <h1>Checkers</h1>
     </header>
+    <div class="button-container">
+    <button id="forfeit">Forfeit &nbsp&lpar;&#32;&bull;&#32;&#7446;&#32;&bull;&#32;&#65377;&rpar;
+    </button>
+  </div>
     <div class="main">
       <div class="stats" id="player1-stats">
         <h3 id="turnP1">Player 1</h3>
         <div class="pieces-info">
-          <p>Score: <span id="scoreP1">0</span></p>
-          <p>Remaning pieces: <span id="rem-piecesP1">12</span></p>
+          <p>Score: <br> <span id="scoreP1">0</span></p>
+          <p>Remaning pieces: <br> <span id="rem-piecesP1">12</span></p>
         </div>
       </div>
       <div id="board">
@@ -89,14 +94,14 @@
       <div class="stats" id="player2-stats">
         <h3 id="turnP2">Player 2</h3>
         <div class="pieces-info">
-          <p>Score: <span id="scoreP2">0</span></p>
-          <p>Remaning pieces: <span id="rem-piecesP2">12</span></p>
+          <p>Score: <br> <span id="scoreP2">0</span></p>
+          <p>Remaning pieces: <br> <span id="rem-piecesP2">12</span></p>
         </div>
       </div>
     </div>
     <div id="result">
-      <p><span id="player"></span> has won !</p>
+      <p><span id="player"></span> has won!  &nbsp&nbsp&#11804;&lpar;&#65377;&#707;&#32;&#7509;&#32;&#706;&#32;&rpar;&#11805;&#9825;</p>
     </div>
-    <button id="forfeit">Forfeit</button>
+
   </body>
 </html>
