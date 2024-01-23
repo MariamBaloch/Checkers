@@ -1,0 +1,35 @@
+#link-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+}
+#gameRules,
+#playGame {
+  border: 2px #ffb996 solid;
+  font-size: 50px;
+  width: 350px;
+  border-radius: 30px;
+  opacity: 0.7;
+  padding: 20px;
+  text-align: center;
+  margin: 30px;
+}
+#gameRules {
+  background-color: #92c7cf;
+}
+#playGame {
+  background-color: pink;
+}
+a {
+  text-decoration: none;
+}
+#gameRules:hover {
+  background-color: #aed080;
+  color: white;
+}
+#playGame:hover {
+  background-color: #ffcf81;
+  color: white;
+}

@@ -8,6 +8,8 @@ let remaningPiecesP1 = 12
 let remaningPiecesP2 = 12
 let x = 1
 let y = 1
+let click = 0
+let prevValues = []
 let board_place = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
   [0, 1, 0, 1, 0, 1, 0, 1, 0, 0],
@@ -740,6 +742,78 @@ const highlight_movable_pieces = (turn) => {
   }
 }
 
+const update_stats = (turn) => {
+  if (turn === 1) {
+    scoreP1++
+    remaningPiecesP2--
+    document.querySelector('#scoreP1').innerHTML = scoreP1
+    document.querySelector('#rem-piecesP2').innerHTML = remaningPiecesP2
+  } else if (turn === 2) {
+    scoreP2++
+    remaningPiecesP1--
+    document.querySelector('#scoreP2').innerHTML = scoreP2
+    document.querySelector('#rem-piecesP1').innerHTML = remaningPiecesP1
+  }
+}
+
+const play_turn = (turn, x, y, classname, removed, new_moves, turnComplete) => {
+  prevValues.push(x)
+  prevValues.push(y)
+  prevValues.push(classname)
+  let prevX = prevValues[prevValues.length - 6]
+  let prevY = prevValues[prevValues.length - 5]
+  let prevClass = prevValues[prevValues.length - 4]
+  click++
+  if (click === 1) {
+    moves = movable_blocks(x, y, classname)
+    new_moves = removable_blocks(moves, classname)
+    hightlight_movable_blocks(new_moves)
+  }
+  if (click === 2) {
+    if (board_place[x][y] === 'h' && board_place[x][y] !== 0) {
+      click = 3
+    } else {
+      reset_highlight()
+      moves = movable_blocks(x, y, classname)
+      new_moves = removable_blocks(moves, classname)
+      hightlight_movable_blocks(new_moves)
+      click = 1
+    }
+  }
+  if (click === 3) {
+    moves = movable_blocks(prevX, prevY, prevClass)
+    new_moves = removable_blocks(moves, prevClass)
+    removed = make_move(x, y, new_moves, prevX, prevY, prevClass)
+    if (removed === 1) {
+      update_stats(turn)
+    }
+    if (
+      double_jump(x, y, prevClass).removable_status === true &&
+      removed === 1
+    ) {
+      click = 3
+      hightlight_movable_blocks(double_jump(x, y, prevClass))
+    } else {
+      turnComplete = true
+    }
+  }
+  if (click === 4) {
+    removed = make_move(
+      x,
+      y,
+      double_jump(prevX, prevY, prevValues[prevValues.length - 7]),
+      prevX,
+      prevY,
+      prevValues[prevValues.length - 7]
+    )
+    turnComplete = true
+    if (removed === 1) {
+      update_stats(turn)
+    }
+  }
+  return turnComplete
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // GAME LOGIC
 
@@ -752,8 +826,7 @@ if (turn === 1) {
   highlight_movable_pieces(2)
 }
 //Event Listener
-let click = 0
-let prevValues = []
+
 for (let i = 0; i < blocks.length; i++) {
   blocks[i].addEventListener('click', () => {
     let classname = blocks[i].classList[1]
@@ -761,6 +834,7 @@ for (let i = 0; i < blocks.length; i++) {
     let y = blocks[i].value[1]
     let removed = 0
     let new_moves
+    let turnComplete = false
     if (
       blocks[i].value[2] === 1 &&
       turn === 1 &&
@@ -771,70 +845,75 @@ for (let i = 0; i < blocks.length; i++) {
       if (scoreP1 === 12) {
         displayWin(turn)
       }
-      prevValues.push(x)
-      prevValues.push(y)
-      prevValues.push(classname)
-      let prevX = prevValues[prevValues.length - 6]
-      let prevY = prevValues[prevValues.length - 5]
-      let prevClass = prevValues[prevValues.length - 4]
-      click++
-      if (click === 1) {
-        moves = movable_blocks(x, y, classname)
-        new_moves = removable_blocks(moves, classname)
-        hightlight_movable_blocks(new_moves)
-      }
-      if (click === 2) {
-        if (board_place[x][y] === 'h' && board_place[x][y] !== 0) {
-          click = 3
-        } else {
-          reset_highlight()
-          moves = movable_blocks(x, y, classname)
-          new_moves = removable_blocks(moves, classname)
-          hightlight_movable_blocks(new_moves)
-          click = 1
-        }
-      }
-      if (click === 3) {
-        moves = movable_blocks(prevX, prevY, prevClass)
-        new_moves = removable_blocks(moves, prevClass)
-        removed = make_move(x, y, new_moves, prevX, prevY, prevClass)
-        if (removed === 1) {
-          scoreP1++
-          remaningPiecesP2--
-          document.querySelector('#scoreP1').innerHTML = scoreP1
-          document.querySelector('#rem-piecesP2').innerHTML = remaningPiecesP2
-        }
-        if (double_jump(x, y, prevClass).removable_status === true) {
-          click = 3
-          hightlight_movable_blocks(double_jump(x, y, prevClass))
-        } else {
-          turn = 2
-          click = 0
-          document.querySelector('#turnP2').innerHTML = "Player 2's turn !"
-          document.querySelector('#turnP1').innerHTML = 'Player 1'
-          highlight_movable_pieces(2)
-        }
-      }
-      if (click === 4) {
-        removed = make_move(
-          x,
-          y,
-          double_jump(prevX, prevY, prevValues[prevValues.length - 7]),
-          prevX,
-          prevY,
-          prevValues[prevValues.length - 7]
-        )
-        if (removed === 1) {
-          scoreP1++
-          remaningPiecesP2--
-          document.querySelector('#scoreP1').innerHTML = scoreP1
-          document.querySelector('#rem-piecesP2').innerHTML = remaningPiecesP2
-        }
-        turn = 2
-        click = 0
+      // prevValues.push(x)
+      // prevValues.push(y)
+      // prevValues.push(classname)
+      // let prevX = prevValues[prevValues.length - 6]
+      // let prevY = prevValues[prevValues.length - 5]
+      // let prevClass = prevValues[prevValues.length - 4]
+      // click++
+      // if (click === 1) {
+      //   moves = movable_blocks(x, y, classname)
+      //   new_moves = removable_blocks(moves, classname)
+      //   hightlight_movable_blocks(new_moves)
+      // }
+      // if (click === 2) {
+      //   if (board_place[x][y] === 'h' && board_place[x][y] !== 0) {
+      //     click = 3
+      //   } else {
+      //     reset_highlight()
+      //     moves = movable_blocks(x, y, classname)
+      //     new_moves = removable_blocks(moves, classname)
+      //     hightlight_movable_blocks(new_moves)
+      //     click = 1
+      //   }
+      // }
+      // if (click === 3) {
+      //   moves = movable_blocks(prevX, prevY, prevClass)
+      //   new_moves = removable_blocks(moves, prevClass)
+      //   removed = make_move(x, y, new_moves, prevX, prevY, prevClass)
+      //   if (removed === 1) {
+      //     update_stats(1)
+      //   }
+      //   if (
+      //     double_jump(x, y, prevClass).removable_status === true &&
+      //     removed === 1
+      //   ) {
+      //     click = 3
+      //     hightlight_movable_blocks(double_jump(x, y, prevClass))
+      //   } else {
+      //     turnComplete = true
+      //   }
+      // }
+      // if (click === 4) {
+      //   removed = make_move(
+      //     x,
+      //     y,
+      //     double_jump(prevX, prevY, prevValues[prevValues.length - 7]),
+      //     prevX,
+      //     prevY,
+      //     prevValues[prevValues.length - 7]
+      //   )
+      //   turnComplete = true
+      //   if (removed === 1) {
+      //     update_stats(1)
+      //   }
+      // }
+      turnComplete = play_turn(
+        1,
+        x,
+        y,
+        classname,
+        removed,
+        new_moves,
+        turnComplete
+      )
+      if (turnComplete === true) {
         document.querySelector('#turnP2').innerHTML = "Player 2's turn !"
         document.querySelector('#turnP1').innerHTML = 'Player 1'
         highlight_movable_pieces(2)
+        turn = 2
+        click = 0
       }
     }
     if (
@@ -849,69 +928,74 @@ for (let i = 0; i < blocks.length; i++) {
       if (scoreP2 === 12) {
         displayWin(turn)
       }
-      prevValues.push(x)
-      prevValues.push(y)
-      prevValues.push(classname)
-      let prevX = prevValues[prevValues.length - 6]
-      let prevY = prevValues[prevValues.length - 5]
-      let prevClass = prevValues[prevValues.length - 4]
-      click++
-      if (click === 1) {
-        moves = movable_blocks(x, y, classname)
-        new_moves = removable_blocks(moves, classname)
-        hightlight_movable_blocks(new_moves)
-      }
-      if (click === 2) {
-        if (board_place[x][y] === 'h' && board_place[x][y] !== 0) {
-          click = 3
-        } else {
-          reset_highlight()
-          moves = movable_blocks(x, y, classname)
-          new_moves = removable_blocks(moves, classname)
-          hightlight_movable_blocks(new_moves)
-          click = 1
-        }
-      }
-      if (click === 3) {
-        moves = movable_blocks(prevX, prevY, prevClass)
-        new_moves = removable_blocks(moves, prevClass)
-        removed = make_move(x, y, new_moves, prevX, prevY, prevClass)
-        if (removed === 1) {
-          scoreP2++
-          remaningPiecesP1--
-          document.querySelector('#scoreP2').innerHTML = scoreP2
-          document.querySelector('#rem-piecesP1').innerHTML = remaningPiecesP1
-        }
-        if (double_jump(x, y, prevClass).removable_status === true) {
-          click = 3
-          hightlight_movable_blocks(double_jump(x, y, prevClass))
-        } else {
-          document.querySelector('#turnP1').innerHTML = "Player 1's turn !"
-          document.querySelector('#turnP2').innerHTML = 'Player 2'
-          turn = 1
-          click = 1
-          highlight_movable_pieces(1) === 0
-        }
-      }
-      if (click === 4) {
-        removed = make_move(
-          x,
-          y,
-          double_jump(prevX, prevY, prevValues[prevValues.length - 7]),
-          prevX,
-          prevY,
-          prevValues[prevValues.length - 7]
-        )
-        if (removed === 1) {
-          scoreP2++
-          remaningPiecesP1--
-          document.querySelector('#scoreP2').innerHTML = scoreP2
-          document.querySelector('#rem-piecesP1').innerHTML = remaningPiecesP1
-        }
+      // prevValues.push(x)
+      // prevValues.push(y)
+      // prevValues.push(classname)
+      // let prevX = prevValues[prevValues.length - 6]
+      // let prevY = prevValues[prevValues.length - 5]
+      // let prevClass = prevValues[prevValues.length - 4]
+      // click++
+      // if (click === 1) {
+      //   moves = movable_blocks(x, y, classname)
+      //   new_moves = removable_blocks(moves, classname)
+      //   hightlight_movable_blocks(new_moves)
+      // }
+      // if (click === 2) {
+      //   if (board_place[x][y] === 'h' && board_place[x][y] !== 0) {
+      //     click = 3
+      //   } else {
+      //     reset_highlight()
+      //     moves = movable_blocks(x, y, classname)
+      //     new_moves = removable_blocks(moves, classname)
+      //     hightlight_movable_blocks(new_moves)
+      //     click = 1
+      //   }
+      // }
+      // if (click === 3) {
+      //   moves = movable_blocks(prevX, prevY, prevClass)
+      //   new_moves = removable_blocks(moves, prevClass)
+      //   removed = make_move(x, y, new_moves, prevX, prevY, prevClass)
+      //   if (removed === 1) {
+      //     update_stats(2)
+      //   }
+      //   if (
+      //     double_jump(x, y, prevClass).removable_status === true &&
+      //     removed === 1
+      //   ) {
+      //     click = 3
+      //     hightlight_movable_blocks(double_jump(x, y, prevClass))
+      //   } else {
+      //     turnComplete = true
+      //   }
+      // }
+      // if (click === 4) {
+      //   removed = make_move(
+      //     x,
+      //     y,
+      //     double_jump(prevX, prevY, prevValues[prevValues.length - 7]),
+      //     prevX,
+      //     prevY,
+      //     prevValues[prevValues.length - 7]
+      //   )
+      //   turnComplete = true
+      //   if (removed === 1) {
+      //     update_stats(2)
+      //   }
+      // }
+      turnComplete = play_turn(
+        2,
+        x,
+        y,
+        classname,
+        removed,
+        new_moves,
+        turnComplete
+      )
+      if (turnComplete === true) {
         document.querySelector('#turnP1').innerHTML = "Player 1's turn !"
         document.querySelector('#turnP2').innerHTML = 'Player 2'
+        highlight_movable_pieces(1)
         turn = 1
-        highlight_movable_pieces(1) === 0
         click = 1
       }
     }

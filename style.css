@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Sniglet&display=swap');
 header {
+  margin-top: 20px;
   text-align: center;
   color: #fffffe;
   border: 8px #ffffff dotted;
@@ -13,8 +14,23 @@ h1 {
 }
 body {
   background-color: white;
-  background-image: url(images/stars.jpg);
+  background-image: url(images/stars.png);
   background-repeat: no-repeat;
   background-size: cover;
   font-family: 'Sniglet', system-ui;
+}
+#home-logo {
+  position: absolute;
+  top: 1px;
+  left: 40px;
+  font-size: 20px;
+  color: white;
+  text-decoration: none;
+}
+#ghost {
+  position: relative;
+  top: 30px;
+}
+#home-logo:hover {
+  color: #983333;
 }

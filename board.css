@@ -1,10 +1,3 @@
-body {
-  background-color: white;
-  background-image: url(images/stars.png);
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
 .main {
   display: flex;
   flex-direction: row;
@@ -43,10 +36,10 @@ body {
 .button-container {
   text-align: center;
 }
-#forfeit {
+#forfeit,
+#home {
   margin-top: 30px;
   background-color: #f3b95f;
-
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -56,30 +49,31 @@ body {
   font-weight: bold;
   border: 2px rgb(82, 0, 0) solid;
 }
-#forfeit:hover {
+#forfeit:hover,
+#home:hover {
   background-color: #d04848;
   cursor: pointer;
 }
 .piece {
-  background-image: url(images/Drawing.png);
+  background-image: url(images/ghost.png);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
 .op-piece {
-  background-image: url(images/Drawing2.png);
+  background-image: url(images/born.png);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
 .cr-piece {
-  background-image: url(images/Crowned1.png);
+  background-image: url(images/clown_ghost.png);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
 .cr-op-piece {
-  background-image: url(images/Crowned2.png);
+  background-image: url(images/clown_born.png);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -90,11 +84,10 @@ body {
 #result {
   display: none;
   position: absolute;
-  top: 330px;
+  top: 300px;
   z-index: 5000;
   background-color: white;
-  height: 100px;
-  width: 95%;
+  min-width: 95%;
   margin: 0px;
   text-align: center;
   padding: 2%;
@@ -102,6 +95,10 @@ body {
   border: 1px black solid;
   border-radius: 20px;
   color: red;
+}
+#home {
+  position: relative;
+  bottom: 25px;
 }
 
 .stats {

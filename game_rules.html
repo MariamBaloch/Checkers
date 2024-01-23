@@ -4,15 +4,50 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="game-rules.css">
   <title>Checkers - Game Rules</title>
 </head>
 <body>
   <header>
     <h1>Checkers</h1>
+    <a href="home_page.html" id="home-logo"><img src="images/ghost.png" alt="home" width="70px" id="ghost" >Go Home!</a>
     </header>
     <div id="game-rules">
-      <h2>Rules:</h2>
-      
+      <h2>GAME RULES</h2>
+      <p>
+        <ul>
+          <li class="rules-heading">
+            Setup </li>
+            <ul>
+              <li class="rule-explain">The game is played on an 8x8 square board.</li>
+                <li class="rule-explain">Each player starts with 12 pieces.</li>
+                <li class="rule-explain">The pieces are placed on the dark squares of the first three rows on both sides, with 2 middle rows being empty.</li>
+            </ul>
+            <li class="rules-heading">
+              Starting Player </li>
+          <ul>
+            <li class="rule-explain">The start player is decided by rolling a dice</li>
+          </ul>
+          <li class="rules-heading">
+            Movement </li>
+            <ul>
+              <li class="rule-explain">Regular pieces can only move diagonally forward.</li>
+              <li class="rule-explain">King pieces (pieces that have reached the last row on opponent side) can move diagonly forward or backward.</li>
+            </ul>
+          </li>
+          <li class="rules-heading">Win Condition</li>
+          <ul>
+            <li class="rule-explain">A player wins by either capturing all enemy pieces of blocking them in a way they cannot make a move on the board</li>
+           
+          </ul>
+          <li class="rules-heading">
+            Capturing Pieces </li>
+          <ul>
+            <li class="rule-explain">A player can capture (remove) enemy pieces by jumping over it</li>
+            <li class="rule-explain">If the space the piece landed on allows the player to jump over another piece, they can jump again in the same turn.</li>
+          </ul>
+        </ul>
+      </p>
     </div>
 </body>
 </html>
