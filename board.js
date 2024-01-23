@@ -221,348 +221,344 @@ const removable_blocks = (moves, classname) => {
   let removable_piece = [[], [], [], []]
   let moves_removables = {}
 
-  //check if this loop even needed?
-  for (let i = 0; i < moves.length; i++) {
-    switch (classname) {
-      case 'piece':
-        if (
-          board_place[moves[0][0]][moves[0][1]] === 2 ||
-          board_place[moves[0][0]][moves[0][1]] === 4
-        ) {
-          new_moves[0][0] = moves[0][0] + 1
-          new_moves[0][1] = moves[0][1] + 1
-          if (board_place[new_moves[0][0]][new_moves[0][1]] > 0) {
-            new_moves[0][0] = false
-            new_moves[0][1] = false
-          }
-          removable_piece[0][0] = moves[0][0]
-          removable_piece[0][1] = moves[0][1]
-        } else if (
-          board_place[moves[0][0]][moves[0][1]] === 1 ||
-          board_place[moves[0][0]][moves[0][1]] === 3
-        ) {
+  switch (classname) {
+    case 'piece':
+      if (
+        board_place[moves[0][0]][moves[0][1]] === 2 ||
+        board_place[moves[0][0]][moves[0][1]] === 4
+      ) {
+        new_moves[0][0] = moves[0][0] + 1
+        new_moves[0][1] = moves[0][1] + 1
+        if (board_place[new_moves[0][0]][new_moves[0][1]] > 0) {
           new_moves[0][0] = false
           new_moves[0][1] = false
-          removable_piece[0][0] = false
-          removable_piece[0][1] = false
-        } else {
-          new_moves[0][0] = moves[0][0]
-          new_moves[0][1] = moves[0][1]
-          removable_piece[0][0] = false
-          removable_piece[0][1] = false
         }
-        if (
-          board_place[moves[1][0]][moves[1][1]] === 2 ||
-          board_place[moves[1][0]][moves[1][1]] === 4
-        ) {
-          new_moves[1][0] = moves[1][0] + 1
-          new_moves[1][1] = moves[1][1] - 1
-          if (board_place[new_moves[1][0]][new_moves[1][1]] > 0) {
-            new_moves[1][0] = false
-            new_moves[1][1] = false
-          }
-          removable_piece[1][0] = moves[1][0]
-          removable_piece[1][1] = moves[1][1]
-        } else if (
-          board_place[moves[1][0]][moves[1][1]] === 1 ||
-          board_place[moves[1][0]][moves[1][1]] === 3
-        ) {
+        removable_piece[0][0] = moves[0][0]
+        removable_piece[0][1] = moves[0][1]
+      } else if (
+        board_place[moves[0][0]][moves[0][1]] === 1 ||
+        board_place[moves[0][0]][moves[0][1]] === 3
+      ) {
+        new_moves[0][0] = false
+        new_moves[0][1] = false
+        removable_piece[0][0] = false
+        removable_piece[0][1] = false
+      } else {
+        new_moves[0][0] = moves[0][0]
+        new_moves[0][1] = moves[0][1]
+        removable_piece[0][0] = false
+        removable_piece[0][1] = false
+      }
+      if (
+        board_place[moves[1][0]][moves[1][1]] === 2 ||
+        board_place[moves[1][0]][moves[1][1]] === 4
+      ) {
+        new_moves[1][0] = moves[1][0] + 1
+        new_moves[1][1] = moves[1][1] - 1
+        if (board_place[new_moves[1][0]][new_moves[1][1]] > 0) {
           new_moves[1][0] = false
           new_moves[1][1] = false
-          removable_piece[1][0] = false
-          removable_piece[1][1] = false
-        } else {
-          new_moves[1][0] = moves[1][0]
-          new_moves[1][1] = moves[1][1]
-          removable_piece[1][0] = false
-          removable_piece[1][1] = false
         }
-        new_moves[2][0] = false
-        new_moves[2][1] = false
-        new_moves[3][0] = false
-        new_moves[3][1] = false
-        removable_piece[2][0] = false
-        removable_piece[2][1] = false
-        removable_piece[3][0] = false
-        removable_piece[3][1] = false
-        break
-      case 'op-piece':
-        if (
-          board_place[moves[0][0]][moves[0][1]] === 1 ||
-          board_place[moves[0][0]][moves[0][1]] === 3
-        ) {
-          new_moves[0][0] = moves[0][0] - 1
-          new_moves[0][1] = moves[0][1] + 1
-          if (board_place[new_moves[0][0]][new_moves[0][1]] > 0) {
-            new_moves[0][0] = false
-            new_moves[0][1] = false
-          }
-          removable_piece[0][0] = moves[0][0]
-          removable_piece[0][1] = moves[0][1]
-        } else if (
-          board_place[moves[0][0]][moves[0][1]] === 2 ||
-          board_place[moves[0][0]][moves[0][1]] === 4
-        ) {
+        removable_piece[1][0] = moves[1][0]
+        removable_piece[1][1] = moves[1][1]
+      } else if (
+        board_place[moves[1][0]][moves[1][1]] === 1 ||
+        board_place[moves[1][0]][moves[1][1]] === 3
+      ) {
+        new_moves[1][0] = false
+        new_moves[1][1] = false
+        removable_piece[1][0] = false
+        removable_piece[1][1] = false
+      } else {
+        new_moves[1][0] = moves[1][0]
+        new_moves[1][1] = moves[1][1]
+        removable_piece[1][0] = false
+        removable_piece[1][1] = false
+      }
+      new_moves[2][0] = false
+      new_moves[2][1] = false
+      new_moves[3][0] = false
+      new_moves[3][1] = false
+      removable_piece[2][0] = false
+      removable_piece[2][1] = false
+      removable_piece[3][0] = false
+      removable_piece[3][1] = false
+      break
+    case 'op-piece':
+      if (
+        board_place[moves[0][0]][moves[0][1]] === 1 ||
+        board_place[moves[0][0]][moves[0][1]] === 3
+      ) {
+        new_moves[0][0] = moves[0][0] - 1
+        new_moves[0][1] = moves[0][1] + 1
+        if (board_place[new_moves[0][0]][new_moves[0][1]] > 0) {
           new_moves[0][0] = false
           new_moves[0][1] = false
-          removable_piece[0][0] = false
-          removable_piece[0][1] = false
-        } else {
-          new_moves[0][0] = moves[0][0]
-          new_moves[0][1] = moves[0][1]
-          removable_piece[0][0] = false
-          removable_piece[0][1] = false
         }
-        if (
-          board_place[moves[1][0]][moves[1][1]] === 1 ||
-          board_place[moves[1][0]][moves[1][1]] === 3
-        ) {
-          new_moves[1][0] = moves[1][0] - 1
-          new_moves[1][1] = moves[1][1] - 1
-          if (board_place[new_moves[1][0]][new_moves[1][1]] > 0) {
-            new_moves[1][0] = false
-            new_moves[1][1] = false
-          }
-          removable_piece[1][0] = moves[1][0]
-          removable_piece[1][1] = moves[1][1]
-        } else if (
-          board_place[moves[1][0]][moves[1][1]] === 2 ||
-          board_place[moves[1][0]][moves[1][1]] === 4
-        ) {
+        removable_piece[0][0] = moves[0][0]
+        removable_piece[0][1] = moves[0][1]
+      } else if (
+        board_place[moves[0][0]][moves[0][1]] === 2 ||
+        board_place[moves[0][0]][moves[0][1]] === 4
+      ) {
+        new_moves[0][0] = false
+        new_moves[0][1] = false
+        removable_piece[0][0] = false
+        removable_piece[0][1] = false
+      } else {
+        new_moves[0][0] = moves[0][0]
+        new_moves[0][1] = moves[0][1]
+        removable_piece[0][0] = false
+        removable_piece[0][1] = false
+      }
+      if (
+        board_place[moves[1][0]][moves[1][1]] === 1 ||
+        board_place[moves[1][0]][moves[1][1]] === 3
+      ) {
+        new_moves[1][0] = moves[1][0] - 1
+        new_moves[1][1] = moves[1][1] - 1
+        if (board_place[new_moves[1][0]][new_moves[1][1]] > 0) {
           new_moves[1][0] = false
           new_moves[1][1] = false
-          removable_piece[1][0] = false
-          removable_piece[1][1] = false
-        } else {
-          new_moves[1][0] = moves[1][0]
-          new_moves[1][1] = moves[1][1]
-          removable_piece[1][0] = false
-          removable_piece[1][1] = false
         }
-        new_moves[2][0] = false
-        new_moves[2][1] = false
-        new_moves[3][0] = false
-        new_moves[3][1] = false
-        removable_piece[2][0] = false
-        removable_piece[2][1] = false
-        removable_piece[3][0] = false
-        removable_piece[3][1] = false
-        break
-      case 'cr-piece':
-        if (
-          board_place[moves[0][0]][moves[0][1]] === 2 ||
-          board_place[moves[0][0]][moves[0][1]] === 4
-        ) {
-          new_moves[0][0] = moves[0][0] + 1
-          new_moves[0][1] = moves[0][1] + 1
-          if (board_place[new_moves[0][0]][new_moves[0][1]] > 0) {
-            new_moves[0][0] = false
-            new_moves[0][1] = false
-          }
-          removable_piece[0][0] = moves[0][0]
-          removable_piece[0][1] = moves[0][1]
-        } else if (
-          board_place[moves[0][0]][moves[0][1]] === 1 ||
-          board_place[moves[0][0]][moves[0][1]] === 3
-        ) {
+        removable_piece[1][0] = moves[1][0]
+        removable_piece[1][1] = moves[1][1]
+      } else if (
+        board_place[moves[1][0]][moves[1][1]] === 2 ||
+        board_place[moves[1][0]][moves[1][1]] === 4
+      ) {
+        new_moves[1][0] = false
+        new_moves[1][1] = false
+        removable_piece[1][0] = false
+        removable_piece[1][1] = false
+      } else {
+        new_moves[1][0] = moves[1][0]
+        new_moves[1][1] = moves[1][1]
+        removable_piece[1][0] = false
+        removable_piece[1][1] = false
+      }
+      new_moves[2][0] = false
+      new_moves[2][1] = false
+      new_moves[3][0] = false
+      new_moves[3][1] = false
+      removable_piece[2][0] = false
+      removable_piece[2][1] = false
+      removable_piece[3][0] = false
+      removable_piece[3][1] = false
+      break
+    case 'cr-piece':
+      if (
+        board_place[moves[0][0]][moves[0][1]] === 2 ||
+        board_place[moves[0][0]][moves[0][1]] === 4
+      ) {
+        new_moves[0][0] = moves[0][0] + 1
+        new_moves[0][1] = moves[0][1] + 1
+        if (board_place[new_moves[0][0]][new_moves[0][1]] > 0) {
           new_moves[0][0] = false
           new_moves[0][1] = false
-          removable_piece[0][0] = false
-          removable_piece[0][1] = false
-        } else {
-          new_moves[0][0] = moves[0][0]
-          new_moves[0][1] = moves[0][1]
-          removable_piece[0][0] = false
-          removable_piece[0][1] = false
         }
-        if (
-          board_place[moves[1][0]][moves[1][1]] === 2 ||
-          board_place[moves[1][0]][moves[1][1]] === 4
-        ) {
-          new_moves[1][0] = moves[1][0] + 1
-          new_moves[1][1] = moves[1][1] - 1
-          if (board_place[new_moves[1][0]][new_moves[1][1]] > 0) {
-            new_moves[1][0] = false
-            new_moves[1][1] = false
-          }
-          removable_piece[1][0] = moves[1][0]
-          removable_piece[1][1] = moves[1][1]
-        } else if (
-          board_place[moves[1][0]][moves[1][1]] === 1 ||
-          board_place[moves[1][0]][moves[1][1]] === 3
-        ) {
+        removable_piece[0][0] = moves[0][0]
+        removable_piece[0][1] = moves[0][1]
+      } else if (
+        board_place[moves[0][0]][moves[0][1]] === 1 ||
+        board_place[moves[0][0]][moves[0][1]] === 3
+      ) {
+        new_moves[0][0] = false
+        new_moves[0][1] = false
+        removable_piece[0][0] = false
+        removable_piece[0][1] = false
+      } else {
+        new_moves[0][0] = moves[0][0]
+        new_moves[0][1] = moves[0][1]
+        removable_piece[0][0] = false
+        removable_piece[0][1] = false
+      }
+      if (
+        board_place[moves[1][0]][moves[1][1]] === 2 ||
+        board_place[moves[1][0]][moves[1][1]] === 4
+      ) {
+        new_moves[1][0] = moves[1][0] + 1
+        new_moves[1][1] = moves[1][1] - 1
+        if (board_place[new_moves[1][0]][new_moves[1][1]] > 0) {
           new_moves[1][0] = false
           new_moves[1][1] = false
-          removable_piece[1][0] = false
-          removable_piece[1][1] = false
-        } else {
-          new_moves[1][0] = moves[1][0]
-          new_moves[1][1] = moves[1][1]
-          removable_piece[1][0] = false
-          removable_piece[1][1] = false
         }
-        if (
-          board_place[moves[2][0]][moves[2][1]] === 2 ||
-          board_place[moves[2][0]][moves[2][1]] === 4
-        ) {
-          new_moves[2][0] = moves[2][0] - 1
-          new_moves[2][1] = moves[2][1] - 1
-          if (board_place[new_moves[2][0]][new_moves[2][1]] > 0) {
-            new_moves[2][0] = false
-            new_moves[2][1] = false
-          }
-          removable_piece[2][0] = moves[2][0]
-          removable_piece[2][1] = moves[2][1]
-        } else if (
-          board_place[moves[2][0]][moves[2][1]] === 1 ||
-          board_place[moves[2][0]][moves[2][1]] === 3
-        ) {
+        removable_piece[1][0] = moves[1][0]
+        removable_piece[1][1] = moves[1][1]
+      } else if (
+        board_place[moves[1][0]][moves[1][1]] === 1 ||
+        board_place[moves[1][0]][moves[1][1]] === 3
+      ) {
+        new_moves[1][0] = false
+        new_moves[1][1] = false
+        removable_piece[1][0] = false
+        removable_piece[1][1] = false
+      } else {
+        new_moves[1][0] = moves[1][0]
+        new_moves[1][1] = moves[1][1]
+        removable_piece[1][0] = false
+        removable_piece[1][1] = false
+      }
+      if (
+        board_place[moves[2][0]][moves[2][1]] === 2 ||
+        board_place[moves[2][0]][moves[2][1]] === 4
+      ) {
+        new_moves[2][0] = moves[2][0] - 1
+        new_moves[2][1] = moves[2][1] - 1
+        if (board_place[new_moves[2][0]][new_moves[2][1]] > 0) {
           new_moves[2][0] = false
           new_moves[2][1] = false
-          removable_piece[2][0] = false
-          removable_piece[2][1] = false
-        } else {
-          new_moves[2][0] = moves[2][0]
-          new_moves[2][1] = moves[2][1]
-          removable_piece[2][0] = false
-          removable_piece[2][1] = false
         }
-        if (
-          board_place[moves[3][0]][moves[3][1]] === 2 ||
-          board_place[moves[3][0]][moves[3][1]] === 4
-        ) {
-          new_moves[3][0] = moves[3][0] - 1
-          new_moves[3][1] = moves[3][1] + 1
-          if (board_place[new_moves[3][0]][new_moves[3][1]] > 0) {
-            new_moves[3][0] = false
-            new_moves[3][1] = false
-          }
-          removable_piece[3][0] = moves[3][0]
-          removable_piece[3][1] = moves[3][1]
-        } else if (
-          board_place[moves[3][0]][moves[3][1]] === 1 ||
-          board_place[moves[3][0]][moves[3][1]] === 3
-        ) {
+        removable_piece[2][0] = moves[2][0]
+        removable_piece[2][1] = moves[2][1]
+      } else if (
+        board_place[moves[2][0]][moves[2][1]] === 1 ||
+        board_place[moves[2][0]][moves[2][1]] === 3
+      ) {
+        new_moves[2][0] = false
+        new_moves[2][1] = false
+        removable_piece[2][0] = false
+        removable_piece[2][1] = false
+      } else {
+        new_moves[2][0] = moves[2][0]
+        new_moves[2][1] = moves[2][1]
+        removable_piece[2][0] = false
+        removable_piece[2][1] = false
+      }
+      if (
+        board_place[moves[3][0]][moves[3][1]] === 2 ||
+        board_place[moves[3][0]][moves[3][1]] === 4
+      ) {
+        new_moves[3][0] = moves[3][0] - 1
+        new_moves[3][1] = moves[3][1] + 1
+        if (board_place[new_moves[3][0]][new_moves[3][1]] > 0) {
           new_moves[3][0] = false
           new_moves[3][1] = false
-          removable_piece[3][0] = false
-          removable_piece[3][1] = false
-        } else {
-          new_moves[3][0] = moves[3][0]
-          new_moves[3][1] = moves[3][1]
-          removable_piece[3][0] = false
-          removable_piece[3][1] = false
         }
-        break
-      case 'cr-op-piece':
-        if (
-          board_place[moves[0][0]][moves[0][1]] === 1 ||
-          board_place[moves[0][0]][moves[0][1]] === 3
-        ) {
-          new_moves[0][0] = moves[0][0] - 1
-          new_moves[0][1] = moves[0][1] + 1
-          if (board_place[new_moves[0][0]][0][1]) {
-            new_moves[0][0] = false
-            new_moves[0][1] = false
-          }
-          removable_piece[0][0] = moves[0][0]
-          removable_piece[0][1] = moves[0][1]
-        } else if (
-          board_place[moves[0][0]][moves[0][1]] === 2 ||
-          board_place[moves[0][0]][moves[0][1]] === 4
-        ) {
+        removable_piece[3][0] = moves[3][0]
+        removable_piece[3][1] = moves[3][1]
+      } else if (
+        board_place[moves[3][0]][moves[3][1]] === 1 ||
+        board_place[moves[3][0]][moves[3][1]] === 3
+      ) {
+        new_moves[3][0] = false
+        new_moves[3][1] = false
+        removable_piece[3][0] = false
+        removable_piece[3][1] = false
+      } else {
+        new_moves[3][0] = moves[3][0]
+        new_moves[3][1] = moves[3][1]
+        removable_piece[3][0] = false
+        removable_piece[3][1] = false
+      }
+      break
+    case 'cr-op-piece':
+      if (
+        board_place[moves[0][0]][moves[0][1]] === 1 ||
+        board_place[moves[0][0]][moves[0][1]] === 3
+      ) {
+        new_moves[0][0] = moves[0][0] - 1
+        new_moves[0][1] = moves[0][1] + 1
+        if (board_place[new_moves[0][0]][0][1]) {
           new_moves[0][0] = false
           new_moves[0][1] = false
-          removable_piece[0][0] = false
-          removable_piece[0][1] = false
-        } else {
-          new_moves[0][0] = moves[0][0]
-          new_moves[0][1] = moves[0][1]
-          removable_piece[0][0] = false
-          removable_piece[0][1] = false
         }
-        if (
-          board_place[moves[1][0]][moves[1][1]] === 1 ||
-          board_place[moves[1][0]][moves[1][1]] === 3
-        ) {
-          new_moves[1][0] = moves[1][0] - 1
-          new_moves[1][1] = moves[1][1] - 1
-          if (board_place[new_moves[1][0]][new_moves[1][1]] > 0) {
-            new_moves[1][0] = false
-            new_moves[1][1] = false
-          }
-          removable_piece[1][0] = moves[1][0]
-          removable_piece[1][1] = moves[1][1]
-        } else if (
-          board_place[moves[1][0]][moves[1][1]] === 2 ||
-          board_place[moves[1][0]][moves[1][1]] === 4
-        ) {
+        removable_piece[0][0] = moves[0][0]
+        removable_piece[0][1] = moves[0][1]
+      } else if (
+        board_place[moves[0][0]][moves[0][1]] === 2 ||
+        board_place[moves[0][0]][moves[0][1]] === 4
+      ) {
+        new_moves[0][0] = false
+        new_moves[0][1] = false
+        removable_piece[0][0] = false
+        removable_piece[0][1] = false
+      } else {
+        new_moves[0][0] = moves[0][0]
+        new_moves[0][1] = moves[0][1]
+        removable_piece[0][0] = false
+        removable_piece[0][1] = false
+      }
+      if (
+        board_place[moves[1][0]][moves[1][1]] === 1 ||
+        board_place[moves[1][0]][moves[1][1]] === 3
+      ) {
+        new_moves[1][0] = moves[1][0] - 1
+        new_moves[1][1] = moves[1][1] - 1
+        if (board_place[new_moves[1][0]][new_moves[1][1]] > 0) {
           new_moves[1][0] = false
           new_moves[1][1] = false
-          removable_piece[1][0] = false
-          removable_piece[1][1] = false
-        } else {
-          new_moves[1][0] = moves[1][0]
-          new_moves[1][1] = moves[1][1]
-          removable_piece[1][0] = false
-          removable_piece[1][1] = false
         }
-        if (
-          board_place[moves[2][0]][moves[2][1]] === 1 ||
-          board_place[moves[2][0]][moves[2][1]] === 3
-        ) {
-          new_moves[2][0] = moves[2][0] + 1
-          new_moves[2][1] = moves[2][1] - 1
-          if (board_place[new_moves[2][0]][new_moves[2][1]] > 0) {
-            new_moves[2][0] = false
-            new_moves[2][1] = false
-          }
-          removable_piece[2][0] = moves[2][0]
-          removable_piece[2][1] = moves[2][1]
-        } else if (
-          board_place[moves[2][0]][moves[2][1]] === 2 ||
-          board_place[moves[2][0]][moves[2][1]] === 4
-        ) {
+        removable_piece[1][0] = moves[1][0]
+        removable_piece[1][1] = moves[1][1]
+      } else if (
+        board_place[moves[1][0]][moves[1][1]] === 2 ||
+        board_place[moves[1][0]][moves[1][1]] === 4
+      ) {
+        new_moves[1][0] = false
+        new_moves[1][1] = false
+        removable_piece[1][0] = false
+        removable_piece[1][1] = false
+      } else {
+        new_moves[1][0] = moves[1][0]
+        new_moves[1][1] = moves[1][1]
+        removable_piece[1][0] = false
+        removable_piece[1][1] = false
+      }
+      if (
+        board_place[moves[2][0]][moves[2][1]] === 1 ||
+        board_place[moves[2][0]][moves[2][1]] === 3
+      ) {
+        new_moves[2][0] = moves[2][0] + 1
+        new_moves[2][1] = moves[2][1] - 1
+        if (board_place[new_moves[2][0]][new_moves[2][1]] > 0) {
           new_moves[2][0] = false
           new_moves[2][1] = false
-          removable_piece[2][0] = false
-          removable_piece[2][1] = false
-        } else {
-          new_moves[2][0] = moves[2][0]
-          new_moves[2][1] = moves[2][1]
-          removable_piece[2][0] = false
-          removable_piece[2][1] = false
         }
-        if (
-          board_place[moves[3][0]][moves[3][1]] === 1 ||
-          board_place[moves[3][0]][moves[3][1]] === 3
-        ) {
-          new_moves[3][0] = moves[3][0] + 1
-          new_moves[3][1] = moves[3][1] + 1
-          if (board_place[new_moves[3][0]][new_moves[3][1]] > 0) {
-            new_moves[3][0] = false
-            new_moves[3][1] = false
-          }
-          removable_piece[3][0] = moves[3][0]
-          removable_piece[3][1] = moves[3][1]
-        } else if (
-          board_place[moves[3][0]][moves[3][1]] === 2 ||
-          board_place[moves[3][0]][moves[3][1]] === 4
-        ) {
+        removable_piece[2][0] = moves[2][0]
+        removable_piece[2][1] = moves[2][1]
+      } else if (
+        board_place[moves[2][0]][moves[2][1]] === 2 ||
+        board_place[moves[2][0]][moves[2][1]] === 4
+      ) {
+        new_moves[2][0] = false
+        new_moves[2][1] = false
+        removable_piece[2][0] = false
+        removable_piece[2][1] = false
+      } else {
+        new_moves[2][0] = moves[2][0]
+        new_moves[2][1] = moves[2][1]
+        removable_piece[2][0] = false
+        removable_piece[2][1] = false
+      }
+      if (
+        board_place[moves[3][0]][moves[3][1]] === 1 ||
+        board_place[moves[3][0]][moves[3][1]] === 3
+      ) {
+        new_moves[3][0] = moves[3][0] + 1
+        new_moves[3][1] = moves[3][1] + 1
+        if (board_place[new_moves[3][0]][new_moves[3][1]] > 0) {
           new_moves[3][0] = false
           new_moves[3][1] = false
-          removable_piece[3][0] = false
-          removable_piece[3][1] = false
-        } else {
-          new_moves[3][0] = moves[3][0]
-          new_moves[3][1] = moves[3][1]
-          removable_piece[3][0] = false
-          removable_piece[3][1] = false
         }
-        break
-    }
+        removable_piece[3][0] = moves[3][0]
+        removable_piece[3][1] = moves[3][1]
+      } else if (
+        board_place[moves[3][0]][moves[3][1]] === 2 ||
+        board_place[moves[3][0]][moves[3][1]] === 4
+      ) {
+        new_moves[3][0] = false
+        new_moves[3][1] = false
+        removable_piece[3][0] = false
+        removable_piece[3][1] = false
+      } else {
+        new_moves[3][0] = moves[3][0]
+        new_moves[3][1] = moves[3][1]
+        removable_piece[3][0] = false
+        removable_piece[3][1] = false
+      }
+      break
   }
-
   moves_removables.moves = new_moves
   moves_removables.removables = removable_piece
   return moves_removables
@@ -764,12 +760,6 @@ for (let i = 0; i < blocks.length; i++) {
     let classname = blocks[i].classList[1]
     let x = blocks[i].value[0]
     let y = blocks[i].value[1]
-    prevValues.push(x)
-    prevValues.push(y)
-    prevValues.push(classname)
-    let prevX = prevValues[prevValues.length - 6]
-    let prevY = prevValues[prevValues.length - 5]
-    let prevClass = prevValues[prevValues.length - 4]
     let removed = 0
     let new_moves
     if (
@@ -782,6 +772,12 @@ for (let i = 0; i < blocks.length; i++) {
       if (scoreP1 === 12) {
         displayWin(turn)
       }
+      prevValues.push(x)
+      prevValues.push(y)
+      prevValues.push(classname)
+      let prevX = prevValues[prevValues.length - 6]
+      let prevY = prevValues[prevValues.length - 5]
+      let prevClass = prevValues[prevValues.length - 4]
       click++
       if (click === 1) {
         moves = movable_blocks(x, y, classname)
@@ -854,6 +850,12 @@ for (let i = 0; i < blocks.length; i++) {
       if (scoreP2 === 12) {
         displayWin(turn)
       }
+      prevValues.push(x)
+      prevValues.push(y)
+      prevValues.push(classname)
+      let prevX = prevValues[prevValues.length - 6]
+      let prevY = prevValues[prevValues.length - 5]
+      let prevClass = prevValues[prevValues.length - 4]
       click++
       if (click === 1) {
         moves = movable_blocks(x, y, classname)

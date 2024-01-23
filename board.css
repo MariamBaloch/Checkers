@@ -76,8 +76,8 @@
   background-color: white;
 }
 .highlight-movables {
-  outline: 4px yellow ridge;
-  outline-offset: 1px;
+  outline: 3px yellow ridge;
+  outline-offset: -4px;
   z-index: 1000;
   animation: blink 0.9s;
   animation-iteration-count: infinite;
