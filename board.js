@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Global Variables Here
 let blocks = document.querySelectorAll('.board-block')
-let turn = 1
+let turn
 let scoreP1 = 0
 let scoreP2 = 0
 let remaningPiecesP1 = 12
@@ -26,7 +26,7 @@ let board_place = [
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Important Loops
 
-//Assigning values to each board block
+//Assigning values to each board block as co-ordinates
 for (let i = 0; i < blocks.length; i++) {
   if (y >= 9) {
     x++
@@ -222,7 +222,6 @@ const removable_blocks = (moves, classname) => {
   new_moves = [[], [], [], []]
   let removable_piece = [[], [], [], []]
   let moves_removables = {}
-
   switch (classname) {
     case 'piece':
       if (
@@ -570,8 +569,10 @@ const removable_blocks = (moves, classname) => {
 const displayWin = (turn) => {
   if (turn === 1) {
     document.querySelector('#player').innerText = 'Player 1'
+    document.querySelector('#ghost-win').style.display = 'inline-block'
   } else if (turn === 2) {
     document.querySelector('#player').innerText = 'Player 2'
+    document.querySelector('#born-win').style.display = 'inline-block'
   }
   document.querySelector('.main').style.opacity = '0.3'
   document.querySelector('.main').style.pointerEvents = 'none'
@@ -658,7 +659,7 @@ const highlight_movable_pieces = (turn) => {
           if (temp > 0) {
             blocks.forEach((block) => {
               if (block.value[0] === i && block.value[1] === j) {
-                block.classList.toggle('highlight-movables')
+                block.classList.toggle('highlight-movable-ghosts')
               }
             })
             counterP1++
@@ -693,7 +694,7 @@ const highlight_movable_pieces = (turn) => {
           if (temp > 0) {
             blocks.forEach((block) => {
               if (block.value[0] === i && block.value[1] === j) {
-                block.classList.toggle('highlight-movables')
+                block.classList.toggle('highlight-movable-borns')
               }
             })
             counterP2++
@@ -702,15 +703,14 @@ const highlight_movable_pieces = (turn) => {
       }
     }
   }
-
   if (turn === 1) {
     for (let i = 1; i < board_place.length; i++) {
       for (let j = 1; j < 9; j++) {
         if (board_place[i][j] === 2 || board_place[i][j] === 4) {
           blocks.forEach((block) => {
             if (block.value[0] === i && block.value[1] === j) {
-              if (block.classList.contains('highlight-movables'))
-                block.classList.toggle('highlight-movables')
+              if (block.classList.contains('highlight-movable-borns'))
+                block.classList.toggle('highlight-movable-borns')
             }
           })
         }
@@ -727,8 +727,8 @@ const highlight_movable_pieces = (turn) => {
         if (board_place[i][j] === 1 || board_place[i][j] === 3) {
           blocks.forEach((block) => {
             if (block.value[0] === i && block.value[1] === j) {
-              if (block.classList.contains('highlight-movables'))
-                block.classList.toggle('highlight-movables')
+              if (block.classList.contains('highlight-movable-ghosts'))
+                block.classList.toggle('highlight-movable-ghosts')
             }
           })
         }
@@ -742,6 +742,7 @@ const highlight_movable_pieces = (turn) => {
   }
 }
 
+//Update plsayer stats
 const update_stats = (turn) => {
   if (turn === 1) {
     scoreP1++
@@ -756,6 +757,7 @@ const update_stats = (turn) => {
   }
 }
 
+//Logic for playing turn
 const play_turn = (turn, x, y, classname, removed, new_moves, turnComplete) => {
   prevValues.push(x)
   prevValues.push(y)
@@ -814,19 +816,19 @@ const play_turn = (turn, x, y, classname, removed, new_moves, turnComplete) => {
   return turnComplete
 }
 
+//Generating random numbers for dice roll
+const diceRoll = () => {
+  let rand1
+  let rand2
+  rand1 = Math.floor(Math.random() * 6) + 1
+  document.querySelector('#dice1').innerText = `${rand1}`
+  rand2 = Math.floor(Math.random() * 6) + 1
+  document.querySelector('#dice2').innerText = `${rand2}`
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // GAME LOGIC
 
-// Displaying Player Turn
-if (turn === 1) {
-  document.querySelector('#turnP1').innerHTML = "Player 1's turn !"
-  highlight_movable_pieces(1)
-} else if (turn === 2) {
-  document.querySelector('#turnP2').innerHTML = "Player 2's turn !"
-  highlight_movable_pieces(2)
-}
 //Event Listener
-
 for (let i = 0; i < blocks.length; i++) {
   blocks[i].addEventListener('click', () => {
     let classname = blocks[i].classList[1]
@@ -845,60 +847,6 @@ for (let i = 0; i < blocks.length; i++) {
       if (scoreP1 === 12) {
         displayWin(turn)
       }
-      // prevValues.push(x)
-      // prevValues.push(y)
-      // prevValues.push(classname)
-      // let prevX = prevValues[prevValues.length - 6]
-      // let prevY = prevValues[prevValues.length - 5]
-      // let prevClass = prevValues[prevValues.length - 4]
-      // click++
-      // if (click === 1) {
-      //   moves = movable_blocks(x, y, classname)
-      //   new_moves = removable_blocks(moves, classname)
-      //   hightlight_movable_blocks(new_moves)
-      // }
-      // if (click === 2) {
-      //   if (board_place[x][y] === 'h' && board_place[x][y] !== 0) {
-      //     click = 3
-      //   } else {
-      //     reset_highlight()
-      //     moves = movable_blocks(x, y, classname)
-      //     new_moves = removable_blocks(moves, classname)
-      //     hightlight_movable_blocks(new_moves)
-      //     click = 1
-      //   }
-      // }
-      // if (click === 3) {
-      //   moves = movable_blocks(prevX, prevY, prevClass)
-      //   new_moves = removable_blocks(moves, prevClass)
-      //   removed = make_move(x, y, new_moves, prevX, prevY, prevClass)
-      //   if (removed === 1) {
-      //     update_stats(1)
-      //   }
-      //   if (
-      //     double_jump(x, y, prevClass).removable_status === true &&
-      //     removed === 1
-      //   ) {
-      //     click = 3
-      //     hightlight_movable_blocks(double_jump(x, y, prevClass))
-      //   } else {
-      //     turnComplete = true
-      //   }
-      // }
-      // if (click === 4) {
-      //   removed = make_move(
-      //     x,
-      //     y,
-      //     double_jump(prevX, prevY, prevValues[prevValues.length - 7]),
-      //     prevX,
-      //     prevY,
-      //     prevValues[prevValues.length - 7]
-      //   )
-      //   turnComplete = true
-      //   if (removed === 1) {
-      //     update_stats(1)
-      //   }
-      // }
       turnComplete = play_turn(
         1,
         x,
@@ -928,60 +876,6 @@ for (let i = 0; i < blocks.length; i++) {
       if (scoreP2 === 12) {
         displayWin(turn)
       }
-      // prevValues.push(x)
-      // prevValues.push(y)
-      // prevValues.push(classname)
-      // let prevX = prevValues[prevValues.length - 6]
-      // let prevY = prevValues[prevValues.length - 5]
-      // let prevClass = prevValues[prevValues.length - 4]
-      // click++
-      // if (click === 1) {
-      //   moves = movable_blocks(x, y, classname)
-      //   new_moves = removable_blocks(moves, classname)
-      //   hightlight_movable_blocks(new_moves)
-      // }
-      // if (click === 2) {
-      //   if (board_place[x][y] === 'h' && board_place[x][y] !== 0) {
-      //     click = 3
-      //   } else {
-      //     reset_highlight()
-      //     moves = movable_blocks(x, y, classname)
-      //     new_moves = removable_blocks(moves, classname)
-      //     hightlight_movable_blocks(new_moves)
-      //     click = 1
-      //   }
-      // }
-      // if (click === 3) {
-      //   moves = movable_blocks(prevX, prevY, prevClass)
-      //   new_moves = removable_blocks(moves, prevClass)
-      //   removed = make_move(x, y, new_moves, prevX, prevY, prevClass)
-      //   if (removed === 1) {
-      //     update_stats(2)
-      //   }
-      //   if (
-      //     double_jump(x, y, prevClass).removable_status === true &&
-      //     removed === 1
-      //   ) {
-      //     click = 3
-      //     hightlight_movable_blocks(double_jump(x, y, prevClass))
-      //   } else {
-      //     turnComplete = true
-      //   }
-      // }
-      // if (click === 4) {
-      //   removed = make_move(
-      //     x,
-      //     y,
-      //     double_jump(prevX, prevY, prevValues[prevValues.length - 7]),
-      //     prevX,
-      //     prevY,
-      //     prevValues[prevValues.length - 7]
-      //   )
-      //   turnComplete = true
-      //   if (removed === 1) {
-      //     update_stats(2)
-      //   }
-      // }
       turnComplete = play_turn(
         2,
         x,
@@ -996,7 +890,7 @@ for (let i = 0; i < blocks.length; i++) {
         document.querySelector('#turnP2').innerHTML = 'Player 2'
         highlight_movable_pieces(1)
         turn = 1
-        click = 1
+        click = 0
       }
     }
   })
@@ -1016,5 +910,43 @@ document.querySelector('#forfeit').addEventListener('click', () => {
     document.querySelector('#forfeit').style.opacity = '1'
     document.querySelector('#forfeit').style.pointerEvents = 'auto'
     document.querySelector('#result').style.display = 'none'
+  }
+})
+
+document.querySelector('#roll').addEventListener('click', () => {
+  document.querySelector('#roll').style.pointerEvents = 'none'
+  let diceinterval = setInterval(diceRoll, 100)
+  let player1Roll
+  let player2Roll
+  diceinterval
+  setTimeout(() => {
+    clearInterval(diceinterval)
+    player1Roll = document.querySelector('#dice1').innerText
+    player2Roll = document.querySelector('#dice2').innerText
+    if (player1Roll > player2Roll) {
+      document.querySelector('#win-turn').firstElementChild.innerText =
+        'Player 1 Goes First !'
+      document.querySelector('#confirm').style.display = 'inline-block'
+      turn = 1
+    } else {
+      document.querySelector('#win-turn').firstElementChild.innerText =
+        'Player 2 Goes First !'
+      document.querySelector('#confirm').style.display = 'inline-block'
+      turn = 2
+    }
+  }, 1500)
+})
+document.querySelector('#confirm').addEventListener('click', () => {
+  document.querySelector('.main').style.opacity = '1'
+  document.querySelector('.main').style.pointerEvents = 'auto'
+  document.querySelector('#forfeit').style.opacity = '1'
+  document.querySelector('#forfeit').style.pointerEvents = 'auto'
+  document.querySelector('.dice-roll').style.display = 'none'
+  if (turn === 1) {
+    document.querySelector('#turnP1').innerHTML = "Player 1's turn !"
+    highlight_movable_pieces(1)
+  } else if (turn === 2) {
+    document.querySelector('#turnP2').innerHTML = "Player 2's turn !"
+    highlight_movable_pieces(2)
   }
 })

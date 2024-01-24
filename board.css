@@ -3,6 +3,8 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  opacity: 0.3;
+  pointer-events: none;
 }
 #board {
   display: grid;
@@ -36,8 +38,14 @@
 .button-container {
   text-align: center;
 }
+#forfeit {
+  opacity: 0.3;
+  pointer-events: none;
+}
 #forfeit,
-#home {
+#home,
+#roll,
+#confirm {
   margin-top: 30px;
   background-color: #f3b95f;
   color: #fff;
@@ -81,12 +89,13 @@
 .highlight {
   background-color: #eec759 !important;
 }
-#result {
-  display: none;
+
+#result,
+.dice-roll {
   position: absolute;
   top: 300px;
   z-index: 5000;
-  background-color: white;
+  background-color: #bce0d7e4;
   min-width: 95%;
   margin: 0px;
   text-align: center;
@@ -95,6 +104,9 @@
   border: 1px black solid;
   border-radius: 20px;
   color: red;
+}
+#result {
+  display: none;
 }
 #home {
   position: relative;
@@ -120,16 +132,127 @@
   border-radius: 50px;
   color: #638889;
 }
-.highlight-movables {
+.highlight-movable-ghosts {
   border-radius: 10px;
   outline: 3px #d04848 solid;
   outline-offset: -2px;
   z-index: 1000;
-  animation: blink 1.5s;
+  animation: blink 1.5s, floatDiv 1s linear infinite;
   animation-iteration-count: infinite;
 }
+.highlight-movable-borns {
+  border-radius: 10px;
+  outline: 3px #d04848 solid;
+  outline-offset: -2px;
+  z-index: 1000;
+  animation: blink 1.5s, shakeDiv 0.1s linear infinite;
+  animation-iteration-count: infinite;
+}
+
 @keyframes blink {
   50% {
     outline-color: #f3b95f;
   }
+}
+@keyframes floatDiv {
+  0%,
+  100% {
+    transform: translate(0px);
+  }
+  50% {
+    transform: translate(0px, 2px);
+  }
+}
+@keyframes shakeDiv {
+  0%,
+  100% {
+    transform: translate(0px);
+  }
+  50% {
+    transform: translate(1px, 0px);
+  }
+}
+#ghost-win,
+#born-win {
+  margin: 30px;
+}
+#born-win {
+  display: none;
+  animation: shake 0.07s linear infinite;
+}
+#ghost-win {
+  display: none;
+  animation: float 0.3s linear infinite;
+}
+.result-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translate(0px);
+  }
+  50% {
+    transform: translate(0px, 10px);
+  }
+}
+@keyframes shake {
+  0%,
+  100% {
+    transform: translate(0px);
+  }
+  50% {
+    transform: translate(5px);
+  }
+}
+.dice-roll {
+  /* display: none; */
+  background-color: #f49268f8;
+  color: white;
+}
+.dice-roll h2 {
+  color: #440000;
+}
+.dice-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.dice {
+  border: 1px black solid;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  padding: 20px;
+  color: white;
+  background-color: rgb(209, 21, 21);
+}
+#win-turn {
+  color: rgb(255, 255, 255);
+  display: flex;
+  justify-content: center;
+}
+#win-turn p {
+  background-color: #a7b4e0;
+  width: 300px;
+  border-radius: 30px;
+  border: 1px black solid;
+}
+.dice-heading h6 {
+  margin: 0;
+  margin-bottom: 17px;
+}
+#roll {
+  width: 100px;
+}
+#roll:hover {
+  background-color: rgb(65, 1, 1);
+  cursor: pointer;
+}
+#confirm {
+  display: none;
 }
