@@ -3,7 +3,7 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  opacity: 0.3;
+  opacity: 0.1;
   pointer-events: none;
 }
 #board {
@@ -39,7 +39,7 @@
   text-align: center;
 }
 #forfeit {
-  opacity: 0.3;
+  opacity: 0.1;
   pointer-events: none;
 }
 #forfeit,
@@ -208,9 +208,10 @@
   }
 }
 .dice-roll {
-  /* display: none; */
-  background-color: #f49268f8;
+  background-color: #efd3f3;
   color: white;
+  min-width: 30%;
+  left: 33%;
 }
 .dice-roll h2 {
   color: #440000;
@@ -245,6 +246,7 @@
 .dice-heading h6 {
   margin: 0;
   margin-bottom: 17px;
+  color: rgb(58, 44, 44);
 }
 #roll {
   width: 100px;
@@ -255,4 +257,14 @@
 }
 #confirm {
   display: none;
+  width: 50px;
+  font-size: 20px;
+  margin: 0;
+  background-color: #d9edbf;
+  color: #440000;
+}
+#confirm:hover {
+  background-color: #440000;
+  color: white;
+  cursor: pointer;
 }

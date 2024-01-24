@@ -14,6 +14,12 @@
 
 ---
 
+### **_Live Link_**
+
+[Checkers](https://goated-checkers.surge.sh/)
+
+---
+
 ### **_Technologies Used_**
 
 - HTML
@@ -60,20 +66,26 @@
 
 ---
 
-### **_Wireframe Screenshots_**
+### **_Game Screenshots_**
 
 ##### Home Page
 
-![Home Page](images/image.png)
+![Home Page](images/home-page.png)
 
 ##### Dice Roll
 
-![Dice Roll](images/image-1.png)
+![Dice Roll](images/dice-roll.png)
 
 ##### Board
 
-![Board](images/image-2.png)
+![Board](images/board.png)
 
 ##### Game Rules
 
-![Game Rules](images/image-3.png)
+![Game Rules](images/game-rules.png)
+
+---
+
+### **_Credits_**
+
+##### Images for board pieces done by: [RNY](https://github.com/RNY9999)
